@@ -1,5 +1,32 @@
 {
     "words": [
-        "tailwindcss"
+        "Activedescendant",
+        "beivy",
+        "colcount",
+        "colindex",
+        "colspan",
+        "describedby",
+        "dropeffect",
+        "errormessage",
+        "flowto",
+        "haspopup",
+        "inlist",
+        "keyshortcuts",
+        "labelledby",
+        "onformdata",
+        "onslotchange",
+        "onwebkitanimationend",
+        "onwebkitanimationiteration",
+        "onwebkitanimationstart",
+        "onwebkittransitionend",
+        "posinset",
+        "roledescription",
+        "rowcount",
+        "rowindex",
+        "rowspan",
+        "setsize",
+        "tailwindcss",
+        "valuenow",
+        "valuetext"
     ]
 }

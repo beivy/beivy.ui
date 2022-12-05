@@ -110,3 +110,5 @@ types
 
 ## .umi
 */.umi
+sandbox
+*.old

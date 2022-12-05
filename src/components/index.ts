@@ -1,1 +1,1 @@
-export * from './core/container'
+export * from './core/box'

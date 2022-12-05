@@ -1,0 +1,6 @@
+plugins:
+  - name: "removeAttrs"
+    params: 
+      attrs: "(fill|stroke)"
+  - name: "removeDimensions" 
+  - name: "removeViewBox"
