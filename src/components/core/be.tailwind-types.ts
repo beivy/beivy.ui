@@ -461,6 +461,43 @@ export type BeTColumnInterval =
     | '6xl'
     | '7xl'
 
+export type BeTIndentInterval =
+    | '0'
+    | 'px'
+    | '0.5'
+    | '1'
+    | '1.5'
+    | '2'
+    | '2.5'
+    | '3'
+    | '3.5'
+    | '4'
+    | '5'
+    | '6'
+    | '7'
+    | '8'
+    | '9'
+    | '10'
+    | '11'
+    | '12'
+    | '14'
+    | '16'
+    | '20'
+    | '24'
+    | '28'
+    | '32'
+    | '36'
+    | '40'
+    | '44'
+    | '48'
+    | '52'
+    | '56'
+    | '60'
+    | '64'
+    | '72'
+    | '80'
+    | '96'
+
 /**
  * Color schema
  */
@@ -506,14 +543,14 @@ export type BeTPadding = BeTPaddingInterval | BeTAxisPadding
  * margin
  */
 
-export type BeTMarginInterval = BeTSizingInterval
+export type BeTMarginInterval = 'auto' | BeTSizingInterval
 
-export type BeTMarginX = BeTSizingInterval
-export type BeTMarginY = BeTSizingInterval
-export type BeTMarginTop = BeTSizingInterval
-export type BeTMarginRight = BeTSizingInterval
-export type BeTMarginBottom = BeTSizingInterval
-export type BeTMarginLeft = BeTSizingInterval
+export type BeTMarginX = BeTMarginInterval
+export type BeTMarginY = BeTMarginInterval
+export type BeTMarginTop = BeTMarginInterval
+export type BeTMarginRight = BeTMarginInterval
+export type BeTMarginBottom = BeTMarginInterval
+export type BeTMarginLeft = BeTMarginInterval
 
 export interface BeTAxisMargin {
     x?: BeTMarginX | undefined
@@ -665,7 +702,7 @@ export type BeTFlexOrder =
 export interface BeTFlexBox {
     flexDisplay: 'flex' | 'inline-flex'
     flexDirection: 'row' | 'row-reverse' | 'col' | 'col-reverse'
-    flexWrap: 'flex-wrap' | 'flex-nowrap' | 'flex-wrap-reverse'
+    flexWrap: 'wrap' | 'nowrap' | 'wrap-reverse'
     flex: '1' | 'auto' | 'initial' | 'none'
     flexGrow: 'flex-grow' | 'flex-grow-0'
     flexShrink: 'flex-shrink' | 'flex-shrink-0'
@@ -882,6 +919,11 @@ export interface BeTTypography {
         | '10'
     textAlign: 'left' | 'center' | 'right' | 'justify'
     textDecoration: 'underline' | 'line-through' | 'no-underline'
+    textDecorationColor: BeTTextColor
+    textDecorationStyle: 'solid' | 'dashed' | 'dotted' | 'double' | 'wavy'
+    textDecorationThickness: 'auto' | 'from-front' | '0' | '1' | '2' | '4' | '8'
+    textDecorationOffset: 'auto' | '0' | '1' | '2' | '4' | '8'
+    textIndent: BeTIndentInterval
     textTransform: 'uppercase' | 'lowercase' | 'capitalize' | 'normal-case'
     textOverflow: 'truncate' | 'ellipsis' | 'clip'
     verticalAlign:
@@ -944,6 +986,8 @@ export type BeTGap =
 export type BeTSvgFill = 'none' | BeTColor
 export type BeTSvgStroke = 'none' | BeTColor
 export type BeTSvgStrokeWidth = '0' | '1' | '2'
+export type BeTExtTypography = 'prose' | 'sm' | 'lg' | 'xl' | '2xl'
+export type BeTExtTypographyColor = BeTColor
 
 export interface BeTSvg {
     fill: BeTSvgFill

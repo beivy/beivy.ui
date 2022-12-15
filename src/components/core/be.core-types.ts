@@ -8,7 +8,12 @@ import type {
     BeTBorderWidth,
     BeTColumnInterval,
     BeTDisplay,
+    BeTExtTypography,
+    BeTExtTypographyColor,
     BeTFlexDirection,
+    BeTFlexGrow,
+    BeTFlexShrink,
+    BeTFlexWrap,
     BeTGap,
     BeTGridBasicInterval,
     BeTGridInterval,
@@ -44,39 +49,38 @@ import type {
     BeTSvgFill,
     BeTSvgStroke,
     BeTSvgStrokeWidth,
-    BeTTextColor,
+    BeTTypography,
     BeTViewportOrientation,
     BeTWidth,
 } from './be.tailwind-types'
 
-type Permutations<T extends string, U extends string = T> = T extends any
+export type Permutations<T extends string, U extends string = T> = T extends any
     ? T | `${T} ${BeTScreen}:${U}}` | `${T} ${BeTScreen}:${U} ${BeTScreen}:${U}`
     : never
 
-type MixIn<T, P extends string, U = keyof T> = {
+export type MixIn<T, P extends string, U = keyof T> = {
     //@ts-ignore
     [K in U as K extends string ? `${P}${K}` : never]: T[K]
 }
 
-type Screen<T> = MixIn<T, BeTScreen>
+export type Screen<T> = MixIn<T, BeTScreen>
 
-type PseudoState<T> = MixIn<T, BeTPseudoState>
-type PseudoSelector<T> = MixIn<T, BeTPseudoSelector>
-type PseudoFormState<T> = MixIn<T, BeTPseudoFormState>
-type PseudoContents<T> = MixIn<T, BeTPseudoContents>
-type PseudoFormElements<T> = MixIn<T, BeTPseudoFormElements>
-type PseudoFileElements<T> = MixIn<T, BeTPseudoFileElements>
-type PseudoListElements<T> = MixIn<T, BeTPseudoListElements>
-type PseudoTextElements<T> = MixIn<T, BeTPseudoTextElements>
-type PseudoDialogElements<T> = MixIn<T, BeTPseudoDialogElements>
-type PreferColorSchema<T> = MixIn<T, BeTPreferColorSchema>
-type PreferReduceMotions<T> = MixIn<T, BeTPreferReduceMotions>
-type PreferContrast<T> = MixIn<T, BeTPreferContrast>
-type ViewportOrientation<T> = MixIn<T, BeTViewportOrientation>
-type PrintStyle<T> = MixIn<T, BeTPrintStyle>
+export type PseudoState<T> = MixIn<T, BeTPseudoState>
+export type PseudoSelector<T> = MixIn<T, BeTPseudoSelector>
+export type PseudoFormState<T> = MixIn<T, BeTPseudoFormState>
+export type PseudoContents<T> = MixIn<T, BeTPseudoContents>
+export type PseudoFormElements<T> = MixIn<T, BeTPseudoFormElements>
+export type PseudoFileElements<T> = MixIn<T, BeTPseudoFileElements>
+export type PseudoListElements<T> = MixIn<T, BeTPseudoListElements>
+export type PseudoTextElements<T> = MixIn<T, BeTPseudoTextElements>
+export type PseudoDialogElements<T> = MixIn<T, BeTPseudoDialogElements>
+export type PreferColorSchema<T> = MixIn<T, BeTPreferColorSchema>
+export type PreferReduceMotions<T> = MixIn<T, BeTPreferReduceMotions>
+export type PreferContrast<T> = MixIn<T, BeTPreferContrast>
+export type ViewportOrientation<T> = MixIn<T, BeTViewportOrientation>
+export type PrintStyle<T> = MixIn<T, BeTPrintStyle>
 
 export interface FrameProps {
-    $display: BeTDisplay
     $width: BeTWidth
     $minWidth: BeTMinWidth
     $maxWidth: BeTMaxWidth
@@ -86,14 +90,20 @@ export interface FrameProps {
     $margin: BeTMargin
     $padding: BeTPadding
     $space: BeTSpace
-    $textColor: BeTTextColor
-}
-export interface FlexBoxProps {
-    $direction: BeTFlexDirection
-    $gap: BeTGap
 }
 
-export type FramePropsWithoutProps = Omit<FrameProps, 'display'>
+export interface ElementProps {
+    $display: BeTDisplay
+}
+
+export interface TextProps {
+    $textColor: BeTTypography['color']
+    $textAlign: BeTTypography['textAlign']
+    $textDecoration: BeTTypography['textDecoration']
+    $textDecorationColor: BeTTypography['textDecorationColor']
+    $textDecorationStyle: BeTTypography['textDecorationStyle']
+    $TextDecorationThickness: BeTTypography['textDecorationThickness']
+}
 
 export interface BorderProps {
     $borderRadius: BeTBorderRadius
@@ -114,6 +124,13 @@ export interface BackgroundProps {
     $bgBlend: BeTBackground['blendMode']
 }
 
+export interface FlexBoxProps {
+    $direction: BeTFlexDirection
+    $flexGrow: BeTFlexGrow
+    $flexWrap: BeTFlexWrap
+    $flexShrink: BeTFlexShrink
+    $gap: BeTGap
+}
 export interface BoxAlignmentProps {
     $justifyContent: BeTAlignment['justifyContent']
     $justifyItems: BeTAlignment['justifyItems']
@@ -129,10 +146,10 @@ export interface SelfAlignmentProps {
     $placeSelf: BeTAlignment['placeSelf']
 }
 
-export interface BoxPropsWithoutDisplay
-    extends Partial<FramePropsWithoutProps>,
-        Partial<Screen<FramePropsWithoutProps>>,
-        Partial<PseudoState<FramePropsWithoutProps>>,
+export interface CommonProps
+    extends Partial<FrameProps>,
+        Partial<Screen<FrameProps>>,
+        Partial<PseudoState<FrameProps>>,
         Partial<BorderProps>,
         Partial<Screen<BorderProps>>,
         Partial<PseudoState<BorderProps>>,
@@ -142,7 +159,13 @@ export interface BoxPropsWithoutDisplay
         Partial<PreferColorSchema<BackgroundProps>>,
         Partial<BoxAlignmentProps>,
         Partial<Screen<BoxAlignmentProps>>,
-        Partial<PseudoState<BoxAlignmentProps>>,
+        Partial<PseudoState<BoxAlignmentProps>> {}
+
+export interface BoxPropsWithoutDisplay
+    extends CommonProps,
+        Partial<Typography>,
+        Partial<Screen<Typography>>,
+        Partial<PseudoState<Typography>>,
         ComponentPropsWithoutRef<'div'> {}
 
 export interface BoxProps
@@ -155,12 +178,12 @@ export interface BasicGridProps {
     $autoFlow: 'row' | 'col' | 'dense' | 'row-dense' | 'col-dense'
     $gap: BeTGap
 }
-export interface ColumnGridProps {
+export interface ColumnGridProps extends BasicGridProps {
     $cols: BeTGridInterval
     $autoCols: 'auto' | 'min' | 'max' | 'fr'
 }
 
-export interface RowGridProps {
+export interface RowGridProps extends BasicGridProps {
     $rows: BeTGridInterval
     $autoRows: 'auto' | 'min' | 'max' | 'fr'
 }
@@ -240,11 +263,21 @@ export interface SVGProps {
     $strokeWidth: BeTSvgStrokeWidth
 }
 
+export interface Typography {
+    $typography: BeTExtTypography
+    $typographyColor: BeTExtTypographyColor
+}
+
 export interface SVGIconProps
     extends Partial<SVGProps>,
         Partial<Screen<SVGProps>>,
         Partial<PseudoState<SVGProps>>,
-        Partial<FramePropsWithoutProps>,
-        Partial<Screen<FramePropsWithoutProps>>,
-        Partial<PseudoState<FramePropsWithoutProps>>,
+        Partial<FrameProps>,
+        Partial<Screen<FrameProps>>,
+        Partial<PseudoState<FrameProps>>,
         ComponentPropsWithRef<'span'> {}
+
+export type Resize = 'auto' | 'hugContent' | 'fillContainer'
+export interface ElementConstraintsProps extends FrameProps {
+    c__resize?: Resize
+}

@@ -16,5 +16,4 @@ it('', () => {
             />
         )
     }
-    console.log(comp)
 })

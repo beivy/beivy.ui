@@ -655,6 +655,16 @@ export const BeTWPrefixes: PrefixTypes = {
         prefix: 'stroke',
         extra: {},
     },
+    $typography: {
+        prefix: 'prose',
+        extra: {
+            prose: 'prose',
+        },
+    },
+    $typographyColor: {
+        prefix: 'prose',
+        extra: {},
+    },
 } as const
 
 export type BeTWClassNames = keyof typeof BeTWPrefixes

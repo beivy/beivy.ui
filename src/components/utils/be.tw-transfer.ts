@@ -14,7 +14,6 @@ import { AxisType, BeTWClassNames, BeTWPrefixes } from '../core/be.tw-prefix'
 
 export const twPrefix = (value?: string, prefix?: string): TTailwindString => {
     const prefixStr = !!prefix ? `${prefix}-` : ''
-    console.log(value)
     if (value?.startsWith('-')) {
         return `-${prefixStr}${value.slice(1)}` as TTailwindString
     }
@@ -194,7 +193,27 @@ export const twTransfer: {
     }),
     $direction: twIntervalTransferFactory({
         name: '$direction',
-        tcFunc: tc.borderColor,
+        tcFunc: tc.flex,
+    }),
+    $flexBasis: twIntervalTransferFactory({
+        name: '$flexBasis',
+        tcFunc: tc.flexBasis,
+    }),
+    $flexWrap: twIntervalTransferFactory({
+        name: '$flexWrap',
+        tcFunc: tc.flex,
+    }),
+    $flexGrow: twIntervalTransferFactory({
+        name: '$flexGrow',
+        tcFunc: tc.flexGrow,
+    }),
+    $flexShrink: twIntervalTransferFactory({
+        name: '$flexShrink',
+        tcFunc: tc.flexShrink,
+    }),
+    $flexOrder: twIntervalTransferFactory({
+        name: '$flexOrder',
+        tcFunc: tc.flexOrder,
     }),
     $space: (attrs: BeTAttrs) => {
         const { $space } = attrs
@@ -404,6 +423,26 @@ export const twTransfer: {
         name: '$strokeWidth',
         tcFunc: tc.svg,
     }),
+    $typography: twIntervalTransferFactory({
+        name: '$typography',
+        tcFunc: tc.typography,
+    }),
+    $typographyColor: twIntervalTransferFactory({
+        name: '$typographyColor',
+        tcFunc: tc.typography,
+    }),
+    $fontSize: twIntervalTransferFactory({
+        name: '$fontSize',
+        tcFunc: tc.fontSize,
+    }),
+    $fontWeight: twIntervalTransferFactory({
+        name: '$fontWeight',
+        tcFunc: tc.fontWeight,
+    }),
+    $lineHeight: twIntervalTransferFactory({
+        name: '$lineHeight',
+        tcFunc: tc.lineHeight,
+    }),
 }
 
 export const attrsClassNameVisitor = (attrName: string, attrs: BeTAttrs) => {
@@ -522,6 +561,10 @@ export const twSvg = (svgProps: Partial<SVGIconProps>) => {
     return walkThrough(svgProps)
 }
 
+export const twClass = <T>(props: Partial<T>) => {
+    return walkThrough(props)
+}
+
 /*----------------------------------------------------------------
  * private  methods
  */
@@ -632,7 +675,7 @@ function transferObject(
     const axis = BeTWPrefixes[def.name].axis
     if (!axis) {
         throw new Error(
-            'illegal state error: expected a axis object in the prefix definition. ',
+            `illegal state error: expected a axis object in the prefix definition(${def.name}). `,
         )
     }
     const rst = Object.keys(axis).map((key: string) => {

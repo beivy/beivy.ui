@@ -3,10 +3,15 @@ const twExtractor = require('./lib/be.tw-extractor')
 module.exports = {
     content: {
         files: ['./src/**/!(*.test).tsx', './src/**/!(*.test).ts'],
-        // extract: {
-        //     tsx: twExtractor,
-        // },
+        extract: {
+            tsx: twExtractor,
+            ts: twExtractor,
+        },
     },
+    plugins: [
+        require('@tailwindcss/forms'),
+        require('@tailwindcss/typography'),
+    ],
     theme: {
         colors: {
             transparent: 'transparent',
@@ -23,6 +28,7 @@ module.exports = {
                 800: '#1e40af',
                 900: '#1e3a8a',
                 DEFAULT: '#3b82f6',
+                // DEFAULT: 'red',
             },
             second: colors.lime,
             neutral: colors.neutral,

@@ -1,2 +1,3 @@
-import { default as CheckBox } from './checkbox'
-export { CheckBox }
+import { CheckboxProps, CheckBoxValue, default as Checkbox } from './checkbox'
+export * from './checkboxGroup'
+export { Checkbox, CheckBoxValue, CheckboxProps }
