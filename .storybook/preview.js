@@ -1,5 +1,6 @@
 import '../tailwind.css'
 import { setConsoleOptions } from '@storybook/addon-console'
+import './index.css'
 
 setConsoleOptions({
     panelExclude: [],
