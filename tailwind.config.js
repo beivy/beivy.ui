@@ -54,12 +54,11 @@ module.exports = {
                 DEFAULT: '#464343',
             },
             neutral: colors.neutral,
-            semantic: {
-                success: colors.green,
-                warning: colors.orange,
-                error: colors.red,
-                info: colors.cyan,
-            },
+            accent: colors.red,
+            success: colors.green,
+            warning: colors.orange,
+            error: colors.red,
+            info: colors.cyan,
             white: colors.white,
             ext: {
                 ...colors,

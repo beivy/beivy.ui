@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Checkbox } from '../'
-import ThemeProvider from '../../core/themeProvider'
+import { ThemeProvider } from '../../core/themeProvider'
 
 export default {
     title: 'Library/Checkbox',

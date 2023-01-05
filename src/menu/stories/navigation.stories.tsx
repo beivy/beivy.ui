@@ -1,7 +1,7 @@
 import { Box } from '@/core'
 import { TestContainer } from '@/stories/utils'
 import { Navigation } from '../'
-import ThemeProvider from '../../core/themeProvider'
+import { ThemeProvider } from '../../core/themeProvider'
 
 export default {
     title: 'Library/Menu/Navigation',

@@ -1,28 +1,3 @@
-import { Keys } from '@headlessui/react/dist/components/keyboard'
-import { useEvent } from '@headlessui/react/dist/hooks/use-event'
-import { useIsoMorphicEffect } from '@headlessui/react/dist/hooks/use-iso-morphic-effect'
-import { useSyncRefs } from '@headlessui/react/dist/hooks/use-sync-refs'
-import { useTrackedPointer } from '@headlessui/react/dist/hooks/use-tracked-pointer'
-import { Props } from '@headlessui/react/dist/types'
-import {
-    calculateActiveIndex,
-    Focus,
-} from '@headlessui/react/dist/utils/calculate-active-index'
-import { disposables } from '@headlessui/react/dist/utils/disposables'
-import {
-    Focus as FocusManagement,
-    focusIn,
-    getFocusableElements,
-    restoreFocusIfNecessary,
-    sortByDomNode,
-} from '@headlessui/react/dist/utils/focus-management'
-import { match } from '@headlessui/react/dist/utils/match'
-import {
-    Features,
-    forwardRefWithAs,
-    PropsForFeatures,
-    render,
-} from '@headlessui/react/dist/utils/render'
 import {
     createContext,
     createRef,
@@ -38,6 +13,31 @@ import {
     useReducer,
     useRef,
 } from 'react'
+import { useEvent } from './utils/hooks/use-event'
+import { useIsoMorphicEffect } from './utils/hooks/use-iso-morphic-effect'
+import { useSyncRefs } from './utils/hooks/use-sync-refs'
+import { useTrackedPointer } from './utils/hooks/use-tracked-pointer'
+import { Keys } from './utils/keyboard'
+import { Props } from './utils/types'
+import {
+    calculateActiveIndex,
+    Focus,
+} from './utils/utils/calculate-active-index'
+import { disposables } from './utils/utils/disposables'
+import {
+    Focus as FocusManagement,
+    focusIn,
+    getFocusableElements,
+    restoreFocusIfNecessary,
+    sortByDomNode,
+} from './utils/utils/focus-management'
+import { match } from './utils/utils/match'
+import {
+    Features,
+    forwardRefWithAs,
+    PropsForFeatures,
+    render,
+} from './utils/utils/render'
 
 export interface ListRenderPropsArg {
     selectedItemIndex: number | null
@@ -221,6 +221,11 @@ const _List = forwardRefWithAs(
                             const from =
                                 state.items[state.selectedItemIndex].dataRef
                                     .current?.domRef
+                            // console.log(
+                            //     '====>',
+                            //     from.current,
+                            //     getFocusableElements(from.current),
+                            // )
                             disposables().nextFrame(() => {
                                 focusIn(
                                     getFocusableElements(from.current),

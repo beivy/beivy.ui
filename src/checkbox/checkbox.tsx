@@ -1,4 +1,3 @@
-import { useSyncRefs } from '@headlessui/react/dist/hooks/use-sync-refs'
 import React, {
     forwardRef,
     useContext,
@@ -6,6 +5,7 @@ import React, {
     useMemo,
     useRef,
 } from 'react'
+import { useSyncRefs } from '../be.headless/utils/hooks/use-sync-refs'
 import { Input, InputRef, Label, Text } from '../be.html'
 import { Box } from '../core'
 import {

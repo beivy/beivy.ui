@@ -145,12 +145,14 @@ export interface TransformProps {
 export interface TextProps {
     $fontSize: BeTTypography['size']
     $fontWeight: BeTTypography['weight']
+    $lineHeight: BeTTypography['lineHeight']
     $textColor: BeTTypography['color']
     $textAlign: BeTTypography['textAlign']
     $textDecoration: BeTTypography['textDecoration']
     $textDecorationColor: BeTTypography['textDecorationColor']
     $textDecorationStyle: BeTTypography['textDecorationStyle']
-    $TextDecorationThickness: BeTTypography['textDecorationThickness']
+    $textDecorationThickness: BeTTypography['textDecorationThickness']
+    $verticalAlign: BeTTypography['verticalAlign']
 }
 
 export interface BorderProps {
@@ -330,8 +332,6 @@ export interface GridProps
         Partial<PseudoState<GenericGridProps<'grid'>>>,
         BoxPropsWithoutDisplay {}
 
-export interface StackProps extends BoxPropsWithoutDisplay {}
-
 export interface InsetProps {
     $inset?: BeTInset | undefined
     $top?: BeTInsetTop | undefined
@@ -340,11 +340,6 @@ export interface InsetProps {
     $bottom?: BeTInsetBottom | undefined
     $zIndex?: BeTZIndex | undefined
 }
-export interface StackItemProps
-    extends BoxPropsWithoutDisplay,
-        Partial<InsetProps>,
-        Partial<Screen<InsetProps>>,
-        Partial<PseudoState<InsetProps>> {}
 
 export interface ColumnNumProps {
     $columns: BeTColumnInterval
@@ -386,3 +381,14 @@ export interface ElementConstraintsProps
     extends Partial<__ElementConstraintsProps>,
         Partial<Screen<__ElementConstraintsProps>>,
         Partial<PseudoState<__ElementConstraintsProps>> {}
+
+export interface DevControlStyleProps
+    extends Partial<BorderProps>,
+        Partial<FrameProps>,
+        Partial<Screen<FrameProps>>,
+        Partial<PseudoState<FrameProps>>,
+        Partial<Screen<BorderProps>>,
+        Partial<PseudoState<BorderProps>>,
+        Partial<BackgroundProps>,
+        Partial<Screen<BackgroundProps>>,
+        Partial<PseudoState<BackgroundProps>> {}

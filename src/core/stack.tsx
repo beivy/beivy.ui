@@ -1,12 +1,24 @@
 import { FC, forwardRef } from 'react'
 import { twStack, twStackItem } from '../utils'
-import { StackItemProps, StackProps } from './be.core-types'
-
-export interface IStack extends FC<StackProps> {
-    Item?: FC<StackItemProps>
+import {
+    BoxPropsWithoutDisplay,
+    InsetProps,
+    PseudoState,
+    Screen,
+} from './be.core-types'
+export interface StackProps
+    extends React.ComponentPropsWithoutRef<'div'>,
+        BoxPropsWithoutDisplay {
+    children?: React.ReactNode | React.ReactNode[]
 }
 
-const __Stack: IStack = forwardRef<HTMLDivElement>(
+export interface StackItemProps
+    extends BoxPropsWithoutDisplay,
+        Partial<InsetProps>,
+        Partial<Screen<InsetProps>>,
+        Partial<PseudoState<InsetProps>> {}
+
+const __Stack = forwardRef<HTMLDivElement, StackProps>(
     ({ children, ...props }: StackProps, ref) => {
         const { classNames, ...restProps } = twStack(props)
         return (

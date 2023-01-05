@@ -1,4 +1,4 @@
-import ThemeProvider from '@/core/themeProvider'
+import { ThemeProvider } from '@/core/themeProvider'
 import { TestContainer } from '@/stories/utils'
 import { CheckboxGroup } from '../'
 import { checkboxOptions } from './checkbox.data'

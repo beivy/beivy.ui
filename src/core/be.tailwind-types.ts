@@ -303,10 +303,11 @@ export type BeTColorSystem =
     | 'primary'
     | 'second'
     | 'neutral'
-    | 'semantic-success'
-    | 'semantic-warning'
-    | 'semantic-error'
-    | 'semantic-info'
+    | 'accent'
+    | 'success'
+    | 'warning'
+    | 'error'
+    | 'info'
 export type BeTColorHue =
     | 'slate'
     | 'gray'
@@ -328,6 +329,7 @@ export type BeTColorHue =
     | 'fuchsia'
     | 'pink'
     | 'rose'
+    | 'white'
 export type BeTColorSaturation =
     | '50'
     | '100'

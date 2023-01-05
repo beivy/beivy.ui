@@ -1,5 +1,5 @@
 import { Box } from '@/core'
-import ThemeProvider from '@/core/themeProvider'
+import { ThemeProvider } from '@/core/themeProvider'
 import { TestContainer } from '@/stories/utils'
 import { Checkbox } from '../'
 

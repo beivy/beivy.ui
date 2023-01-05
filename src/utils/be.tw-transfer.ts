@@ -1,12 +1,11 @@
 import * as tc from 'tailwindcss-classnames'
 import { TTailwindString } from 'tailwindcss-classnames'
+import { StackItemProps, StackProps } from '..'
 import type {
     BoxProps,
     ColumnProps,
     GridItemProps,
     GridProps,
-    StackItemProps,
-    StackProps,
     SVGIconProps,
 } from '../core/be.core-types'
 import { BeTPseudoPrefix } from '../core/be.tailwind-types'
@@ -270,6 +269,14 @@ export const twTransfer: {
     $padding: twIntervalTransferFactory({
         name: '$padding',
         tcFunc: tc.padding,
+    }),
+    $textAlign: twIntervalTransferFactory({
+        name: '$textAlign',
+        tcFunc: tc.textAlign,
+    }),
+    $verticalAlign: twIntervalTransferFactory({
+        name: 'verticalAlign',
+        tcFunc: tc.verticalAlign,
     }),
     $textColor: twIntervalTransferFactory({
         name: '$textColor',

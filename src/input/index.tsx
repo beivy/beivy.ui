@@ -35,11 +35,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             () =>
                 hasErr
                     ? {
-                          $borderColor: 'semantic-error-300',
-                          $textColor: 'semantic-error-900',
-                          $placeholderColor: 'semantic-error-300',
-                          focus$borderColor: 'semantic-error-500',
-                          focus$ringColor: 'semantic-error-500',
+                          $borderColor: 'error-300',
+                          $textColor: 'error-900',
+                          $placeholderColor: 'error-300',
+                          focus$borderColor: 'error-500',
+                          focus$ringColor: 'error-500',
                       }
                     : {},
             [hasErr],

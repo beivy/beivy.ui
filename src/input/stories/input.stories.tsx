@@ -1,4 +1,4 @@
-import ThemeProvider from '@/core/themeProvider'
+import { ThemeProvider } from '@/core'
 import { Input } from '../'
 export default {
     title: 'Library/Input',

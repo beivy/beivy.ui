@@ -1,5 +1,6 @@
 export * from './anchor'
 export * from './button'
+export * from './image'
 export * from './input'
 export * from './label'
 export * from './span'

@@ -261,7 +261,7 @@ export interface ThemeProviderProps
     extends React.ComponentPropsWithoutRef<any> {
     value?: ThemeType
 }
-export default ({ value, children }: ThemeProviderProps) => {
+export const ThemeProvider = ({ value, children }: ThemeProviderProps) => {
     const theme = { ...Theme, ...value }
 
     return (
