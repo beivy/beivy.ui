@@ -1,28 +1,29 @@
 import { Button, Text } from '@/be.html'
 import { Box } from '@/core'
 import { DevControlStyleProps } from '@/core/be.core-types'
-import { useTheme } from '@/hooks'
 import { Icon, IconType } from '@/icon'
 import { predicateHeight } from '@/utils/be.tw-helper'
 import { forwardRef } from 'react'
-
-export interface ButtonCardProps {
+import { useTheme } from '..'
+export interface CardButtonProps {
     icon: IconType
-    label: string
+    label?: string
     description?: string
     style?: DevControlStyleProps
-    onClick?: (evt: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-export const ButtonCard = forwardRef<HTMLButtonElement, ButtonCardProps>(
-    ({ icon, label, description, style, onClick }: ButtonCardProps, ref) => {
+export const CardButton = forwardRef<HTMLButtonElement, CardButtonProps>(
+    (
+        { icon, label, description, style, ...restProps }: CardButtonProps,
+        ref,
+    ) => {
         const theme = useTheme()
         const labelStyle = theme.typography['caption-500']
         const descStyle = theme.typography['caption-300']
         const iconHeight = predicateHeight(labelStyle.$lineHeight)
 
         return (
-            <Button ref={ref} onClick={onClick} $padding="2" {...style}>
+            <Button {...style} {...restProps} $padding="2" ref={ref}>
                 <Box $direction="row" $gap="6" $alignItems="center">
                     <Box
                         $bgColor="info-400"

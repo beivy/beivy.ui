@@ -51,7 +51,7 @@ export const NumInfo = forwardRef<HTMLElement, NumInfoProps>(
                 ref={ref}
             >
                 <Text {...numStyle}>{precisedNum(num, precision)}</Text>
-                <Box $direction="col" $gap="y-2" $alignItems="end">
+                <Box $direction="col" $gap="2" $alignItems="end">
                     <H3 {...descriptionStyle}>{description}</H3>
                     {actions}
                 </Box>

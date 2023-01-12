@@ -308,6 +308,14 @@ export const BeTWPrefixes: PrefixTypes = {
         prefix: 'max-h',
         extra: {},
     },
+    $overflow: {
+        prefix: 'overflow',
+        extra: {},
+    },
+    $overscroll: {
+        prefix: 'overscroll',
+        extra: {},
+    },
     $fontFamily: {
         prefix: 'font',
         extra: {},
@@ -412,6 +420,10 @@ export const BeTWPrefixes: PrefixTypes = {
     },
     $wordBreak: {
         prefix: 'break',
+        extra: {},
+    },
+    $userSelect: {
+        prefix: 'select',
         extra: {},
     },
     $content: {
@@ -583,6 +595,10 @@ export const BeTWPrefixes: PrefixTypes = {
         prefix: 'border',
         extra: {},
     },
+    $opacity: {
+        prefix: 'opacity',
+        extra: {},
+    },
     $divideWidth: {
         prefix: 'divide',
         extra: {},
@@ -685,6 +701,10 @@ export const BeTWPrefixes: PrefixTypes = {
     },
     $typographyColor: {
         prefix: 'prose',
+        extra: {},
+    },
+    $cursor: {
+        prefix: 'cursor',
         extra: {},
     },
 } as const

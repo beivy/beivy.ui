@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import {
     CommonElementProps,
     PseudoState,
@@ -14,7 +15,10 @@ export interface TextProps
         Partial<PseudoState<HTMLTextProps>> {}
 
 export const H1 = ({ children, ...props }: TextProps) => {
-    const { classNames, ...restProps } = twClass<TextProps>(props)
+    const { classNames, ...restProps } = useMemo(
+        () => twClass<TextProps>(props),
+        [props],
+    )
     return (
         <h1 className={classNames} {...restProps}>
             {children}
@@ -23,7 +27,10 @@ export const H1 = ({ children, ...props }: TextProps) => {
 }
 
 export const H2 = ({ children, ...props }: TextProps) => {
-    const { classNames, ...restProps } = twClass<TextProps>(props)
+    const { classNames, ...restProps } = useMemo(
+        () => twClass<TextProps>(props),
+        [props],
+    )
     return (
         <h2 className={classNames} {...restProps}>
             {children}
@@ -32,7 +39,10 @@ export const H2 = ({ children, ...props }: TextProps) => {
 }
 
 export const H3 = ({ children, ...props }: TextProps) => {
-    const { classNames, ...restProps } = twClass<TextProps>(props)
+    const { classNames, ...restProps } = useMemo(
+        () => twClass<TextProps>(props),
+        [props],
+    )
     return (
         <h3 className={classNames} {...restProps}>
             {children}
@@ -41,7 +51,10 @@ export const H3 = ({ children, ...props }: TextProps) => {
 }
 
 export const H4 = ({ children, ...props }: TextProps) => {
-    const { classNames, ...restProps } = twClass<TextProps>(props)
+    const { classNames, ...restProps } = useMemo(
+        () => twClass<TextProps>(props),
+        [props],
+    )
     return (
         <h4 className={classNames} {...restProps}>
             {children}
@@ -50,7 +63,10 @@ export const H4 = ({ children, ...props }: TextProps) => {
 }
 
 export const H5 = ({ children, ...props }: TextProps) => {
-    const { classNames, ...restProps } = twClass<TextProps>(props)
+    const { classNames, ...restProps } = useMemo(
+        () => twClass<TextProps>(props),
+        [props],
+    )
     return (
         <h5 className={classNames} {...restProps}>
             {children}
@@ -59,7 +75,10 @@ export const H5 = ({ children, ...props }: TextProps) => {
 }
 
 export const Text = ({ children, ...props }: TextProps) => {
-    const { classNames, ...restProps } = twClass<TextProps>(props)
+    const { classNames, ...restProps } = useMemo(
+        () => twClass<TextProps>(props),
+        [props],
+    )
     return (
         <p className={classNames} {...restProps}>
             {children}

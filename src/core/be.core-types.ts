@@ -1,4 +1,9 @@
-import type { ComponentPropsWithoutRef, ComponentPropsWithRef } from 'react'
+import type {
+    ComponentPropsWithoutRef,
+    ComponentPropsWithRef,
+    ElementType,
+} from 'react'
+import { RegisterOptions } from 'react-hook-form'
 import type {
     BeTAlignment,
     BeTAxisPadding,
@@ -10,6 +15,7 @@ import type {
     BeTBoxShadow,
     BeTBoxShadowColor,
     BeTColumnInterval,
+    BeTCursor,
     BeTDisplay,
     BeTDivideColor,
     BeTDivideStyle,
@@ -41,6 +47,8 @@ import type {
     BeTOutlineColor,
     BeTOutlineStyle,
     BeTOutlineWidth,
+    BeTOverflow,
+    BeTOverscroll,
     BeTPadding,
     BeTPosition,
     BeTPreferColorSchema,
@@ -59,7 +67,6 @@ import type {
     BeTRingColor,
     BeTRingOffsetColor,
     BeTRingOffsetWidth,
-    BeTRingOpacity,
     BeTRingWidth,
     BeTScreen,
     BeTSpace,
@@ -68,6 +75,7 @@ import type {
     BeTSvgStrokeWidth,
     BeTTransformOrigin,
     BeTTypography,
+    BeTUserSelect,
     BeTViewportOrientation,
     BeTVisibility,
     BeTVisibilityDisplay,
@@ -111,6 +119,8 @@ export interface FrameProps {
     $margin: BeTMargin
     $padding: BeTPadding | BeTAxisPadding
     $space: BeTSpace
+    $overflow: BeTOverflow
+    $overscroll: BeTOverscroll
 }
 
 export interface ElementDisplayProps {
@@ -153,6 +163,7 @@ export interface TextProps {
     $textDecorationStyle: BeTTypography['textDecorationStyle']
     $textDecorationThickness: BeTTypography['textDecorationThickness']
     $verticalAlign: BeTTypography['verticalAlign']
+    $userSelect: BeTUserSelect
 }
 
 export interface BorderProps {
@@ -178,7 +189,6 @@ export interface OutlineProps {
 export interface RingProps {
     $ringColor: BeTRingColor
     $ringWidth: BeTRingWidth
-    $ringOpacity: BeTRingOpacity
     $ringOffsetWidth: BeTRingOffsetWidth
     $ringOffsetColor: BeTRingOffsetColor
 }
@@ -254,9 +264,13 @@ export interface CommonElementProps
         Partial<PseudoState<BoxAlignmentProps>>,
         Partial<TextProps>,
         Partial<Screen<TextProps>>,
-        Partial<PseudoState<TextProps>> {}
+        Partial<PseudoState<TextProps>> {
+    $cursor?: BeTCursor
+}
 
-export interface CommonFormElementProps extends CommonElementProps {}
+export interface CommonFormElementProps {
+    rules?: RegisterOptions
+}
 
 export interface BoxPropsWithoutDisplay
     extends CommonElementProps,
@@ -273,6 +287,18 @@ export interface BoxProps
         Partial<FlexBoxProps>,
         Partial<Screen<FlexBoxProps>>,
         Partial<PseudoState<FlexBoxProps>> {}
+
+export type LayoutElementProps<T extends ElementType> = CommonElementProps &
+    Partial<Typography> &
+    Partial<Screen<Typography>> &
+    Partial<PseudoState<Typography>> &
+    ElementPositionProps &
+    Partial<Screen<ElementPositionProps>> &
+    Partial<PseudoState<ElementPositionProps>> &
+    Partial<FlexBoxProps> &
+    Partial<Screen<FlexBoxProps>> &
+    Partial<PseudoState<FlexBoxProps>> &
+    ComponentPropsWithoutRef<T>
 
 export interface BasicGridProps {
     $autoFlow: 'row' | 'col' | 'dense' | 'row-dense' | 'col-dense'

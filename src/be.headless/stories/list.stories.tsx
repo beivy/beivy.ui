@@ -29,7 +29,7 @@ export const AListComponent = () => {
     }
     return (
         <TestContainer>
-            <List>
+            <List as="div">
                 <List.Item>
                     {({ active, selected }) => {
                         return (

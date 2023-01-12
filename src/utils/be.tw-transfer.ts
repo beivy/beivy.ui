@@ -2,7 +2,6 @@ import * as tc from 'tailwindcss-classnames'
 import { TTailwindString } from 'tailwindcss-classnames'
 import { StackItemProps, StackProps } from '..'
 import type {
-    BoxProps,
     ColumnProps,
     GridItemProps,
     GridProps,
@@ -282,6 +281,50 @@ export const twTransfer: {
         name: '$textColor',
         tcFunc: tc.textColor,
     }),
+    $textDecoration: twIntervalTransferFactory({
+        name: '$textDecoration',
+        tcFunc: tc.textDecoration,
+    }),
+    $textDecorationColor: twIntervalTransferFactory({
+        name: '$textDecorationColor',
+        tcFunc: tc.textDecorationColor,
+    }),
+    $textDecorationStyle: twIntervalTransferFactory({
+        name: '$textDecorationStyle',
+        tcFunc: tc.textDecorationStyle,
+    }),
+    $textDecorationThickness: twIntervalTransferFactory({
+        name: '$textDecorationThickness',
+        tcFunc: tc.textDecorationThickness,
+    }),
+    $textUnderlineOffset: twIntervalTransferFactory({
+        name: '$textUnderlineOffset',
+        tcFunc: tc.textUnderlineOffset,
+    }),
+    $textTransform: twIntervalTransferFactory({
+        name: '$textTransform',
+        tcFunc: tc.textTransform,
+    }),
+    $textOverflow: twIntervalTransferFactory({
+        name: '$textOverflow',
+        tcFunc: tc.textOverflow,
+    }),
+    $textIndent: twIntervalTransferFactory({
+        name: '$textIndent',
+        tcFunc: tc.textIndent,
+    }),
+    $whitespace: twIntervalTransferFactory({
+        name: '$whitespace',
+        tcFunc: tc.whitespace,
+    }),
+    $wordBreak: twIntervalTransferFactory({
+        name: '$wordBreak',
+        tcFunc: tc.wordBreak,
+    }),
+    $userSelect: twIntervalTransferFactory({
+        name: '$userSelect',
+        tcFunc: tc.userSelect,
+    }),
     $width: twIntervalTransferFactory({
         name: '$width',
         tcFunc: tc.width,
@@ -305,6 +348,14 @@ export const twTransfer: {
     $maxHeight: twIntervalTransferFactory({
         name: '$maxHeight',
         tcFunc: tc.maxHeight,
+    }),
+    $overflow: twIntervalTransferFactory({
+        name: '$overflow',
+        tcFunc: tc.overflow,
+    }),
+    $overscroll: twIntervalTransferFactory({
+        name: '$overscroll',
+        tcFunc: tc.overscrollBehavior,
     }),
     // $borderRadius: (attrs: BeTAttrs) => {
     //     const { $borderRadius } = attrs
@@ -330,6 +381,10 @@ export const twTransfer: {
     $borderStyle: twIntervalTransferFactory({
         name: '$borderStyle',
         tcFunc: tc.borderStyle,
+    }),
+    $opacity: twIntervalTransferFactory({
+        name: '$opacity',
+        tcFunc: tc.opacity,
     }),
     $divideWidth: twIntervalTransferFactory({
         name: '$divideWidth',
@@ -510,9 +565,9 @@ export const twTransfer: {
         name: '$ringColor',
         tcFunc: tc.ringColor,
     }),
-    $ringOpacity: twIntervalTransferFactory({
-        name: '$ringOpacity',
-        tcFunc: tc.ringOpacity,
+    $cursor: twIntervalTransferFactory({
+        name: '$cursor',
+        tcFunc: tc.cursor,
     }),
 }
 
@@ -604,7 +659,7 @@ export function walkThroughAttrsTree(
     )
 }
 
-export const twBox = (boxProps: Partial<BoxProps>, inline: boolean = false) => {
+export const twBox = (boxProps: any, inline: boolean = false) => {
     return walkThrough(
         boxProps,
         inline ? tc.display('inline-flex') : tc.display('flex'),

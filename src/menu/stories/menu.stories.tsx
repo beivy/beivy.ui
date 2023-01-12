@@ -1,6 +1,6 @@
+import { ThemeProvider } from '@/core'
 import { TestContainer } from '@/stories/utils'
 import { Menu } from '../'
-import ThemeProvider from '../../core/themeProvider'
 
 export default {
     title: 'Library/Menu/Menu',

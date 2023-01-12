@@ -229,7 +229,20 @@ const Theme = {
     ui: {
         caption: 'caption-400',
         description: 'content-300',
-
+        error: {
+            title: {
+                $fontSize: 'lg',
+                $fontWeight: 'semibold',
+                $lineHeight: '7',
+                $textColor: 'error-400',
+            },
+            content: {
+                $fontSize: 'base',
+                $fontWeight: 'normal',
+                $textColor: 'error-300',
+                $lineHeight: '4',
+            },
+        },
         icon: {
             normal: {},
             selected: {},
@@ -242,12 +255,13 @@ const Theme = {
         },
         text: {
             active: {
-                $bgColor: 'primary-300',
-                $textColor: 'ext-white',
-                $borderRadius: 'md',
+                $textColor: 'neutral-600',
             },
             inactive: {
                 $textColor: 'neutral-500',
+            },
+            disabled: {
+                $textColor: 'neutral-300',
             },
         },
     },

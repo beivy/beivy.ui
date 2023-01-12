@@ -1,8 +1,10 @@
+import { Span } from '@/be.html'
+import { Stack } from '@/core'
+import { CommonElementProps } from '@/core/be.core-types'
+import { BeTColor, BeTHeight, BeTWidth } from '@/core/be.tailwind-types'
+import { useTheme } from '@/hooks'
+import { predicateHeight } from '@/utils/be.tw-helper'
 import { useMemo } from 'react'
-import { Span, Stack, useTheme } from '..'
-import { CommonElementProps } from '../core/be.core-types'
-import { BeTColor, BeTHeight, BeTWidth } from '../core/be.tailwind-types'
-import { predicateHeight } from '../utils/be.tw-helper'
 
 export interface BadgeProps {
     badgeContent?: number | boolean

@@ -1,5 +1,5 @@
 import {
-    CommonFormElementProps,
+    CommonElementProps,
     PseudoState,
     Screen,
     TextProps,
@@ -11,7 +11,7 @@ export interface LabelProps
             React.ComponentPropsWithoutRef<'label'>,
             'className' | 'style'
         >,
-        CommonFormElementProps,
+        CommonElementProps,
         Partial<TextProps>,
         Partial<Screen<TextProps>>,
         Partial<PseudoState<TextProps>> {}

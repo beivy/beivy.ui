@@ -1,7 +1,7 @@
+import { List } from '@/be.headless'
 import { NumInfo } from '@/numInfo'
 import { Card, CardData, CardStyleFunc } from '..'
-import { Avatar, Box, Button, List } from '../..'
-
+import { Avatar, Box, Button } from '../..'
 export default {
     title: 'Library/Card',
     component: Card,
@@ -61,15 +61,14 @@ export const AStyledCard = () => {
         </>
     )
 
-    const styleFuncFactory = (active: boolean, selected: boolean) => {
-        const selectedStyle =
-            selected || active
-                ? ({
-                      $ringWidth: '2',
-                      $ringOffsetWidth: '2',
-                      $ringColor: 'primary-200',
-                  } as ReturnType<CardStyleFunc>)
-                : ({} as ReturnType<CardStyleFunc>)
+    const styleFuncFactory = (active: boolean) => {
+        const selectedStyle = active
+            ? ({
+                  $ringWidth: '2',
+                  $ringOffsetWidth: '2',
+                  $ringColor: 'primary-200',
+              } as ReturnType<CardStyleFunc>)
+            : ({} as ReturnType<CardStyleFunc>)
         const styleFunc = (data: CardData) => {
             return data.status === 'active'
                 ? ({
@@ -91,14 +90,14 @@ export const AStyledCard = () => {
 
     return (
         <Box $margin="0">
-            <List>
+            <List selectedItemIndex={0}>
                 <Box $direction="col" $gap="4" $padding="1">
                     <List.Item>
-                        {({ active, selected }) => {
+                        {({ active }) => {
                             return (
                                 <Card
                                     data={activeData}
-                                    style={styleFuncFactory(active, selected)}
+                                    style={styleFuncFactory(active)}
                                     actions={actions}
                                 >
                                     <Box
@@ -126,11 +125,11 @@ export const AStyledCard = () => {
                         }}
                     </List.Item>
                     <List.Item>
-                        {({ active, selected }) => {
+                        {({ active }) => {
                             return (
                                 <Card
                                     data={closedData}
-                                    style={styleFuncFactory(active, selected)}
+                                    style={styleFuncFactory(active)}
                                     actions={actions}
                                 >
                                     <Box
@@ -142,16 +141,38 @@ export const AStyledCard = () => {
                                             num={199}
                                             description="あなたが送ったメッセージ"
                                             style={{
-                                                $bgColor: 'success-200',
+                                                $bgColor: 'neutral-200',
                                             }}
-                                            actions={<Button>参照</Button>}
+                                            actions={
+                                                <Button
+                                                    size="small"
+                                                    type="primary"
+                                                    outline
+                                                >
+                                                    参照
+                                                </Button>
+                                            }
                                         />
                                         <NumInfo
                                             num={199}
                                             description="あなたがメッセージを送る送信推奨の宛先"
                                             style={{
-                                                $bgColor: 'success-200',
+                                                $bgColor: 'neutral-200',
                                             }}
+                                            actions={
+                                                <Button
+                                                    size="small"
+                                                    type="primary"
+                                                    outline
+                                                    onClick={() => {
+                                                        alert(
+                                                            'clicked on あなたがメッセージを送る送信推奨の宛先 ',
+                                                        )
+                                                    }}
+                                                >
+                                                    参照
+                                                </Button>
+                                            }
                                         />
                                     </Box>
                                 </Card>

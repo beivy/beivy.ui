@@ -26,14 +26,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
         const [err, setErr] = useState<string | undefined | null>()
 
-        const hasErr = useMemo(() => err, [err])
-
         const theme = useTheme()
         const captionStyle = theme.typography[theme.ui.caption]
 
         const errStyle: Partial<CommonElementProps> = useMemo(
             () =>
-                hasErr
+                err
                     ? {
                           $borderColor: 'error-300',
                           $textColor: 'error-900',
@@ -42,18 +40,18 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                           focus$ringColor: 'error-500',
                       }
                     : {},
-            [hasErr],
+            [err],
         )
 
         const errAriaAttrs = useMemo(
             () =>
-                hasErr
+                err
                     ? {
                           ['aria-invalid']: true,
                           ['aria-describedby']: `${name}-error`,
                       }
                     : {},
-            [hasErr],
+            [err],
         )
 
         const inputStyle: Partial<CommonElementProps> = useMemo(

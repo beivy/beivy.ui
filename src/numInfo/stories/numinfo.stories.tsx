@@ -1,7 +1,7 @@
 import { Button } from '@/button'
 import { NumInfo } from '..'
 export default {
-    title: 'Library/numInfo',
+    title: 'Library/NumInfo',
     component: NumInfo,
 }
 

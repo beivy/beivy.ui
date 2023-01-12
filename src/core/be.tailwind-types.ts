@@ -276,13 +276,15 @@ export type BeTPositiveInsetInterval =
     | '2/4'
     | '3/4'
     | 'full'
-export type BeTInsetInterval = BeTPositiveInsetInterval
+export type BeTInsetInterval =
+    | BeTPositiveInsetInterval
+    | `-${BeTPositiveInsetInterval}`
 export type BeTInsetX = `x-${BeTPositiveInsetInterval}`
 export type BeTInsetY = `y-${BeTPositiveInsetInterval}`
-export type BeTInsetTop = BeTPositiveInsetInterval
-export type BeTInsetRight = BeTPositiveInsetInterval
-export type BeTInsetBottom = BeTPositiveInsetInterval
-export type BeTInsetLeft = BeTPositiveInsetInterval
+export type BeTInsetTop = BeTInsetInterval
+export type BeTInsetRight = BeTInsetInterval
+export type BeTInsetBottom = BeTInsetInterval
+export type BeTInsetLeft = BeTInsetInterval
 export type BeTInset =
     | BeTInsetInterval
     | BeTInsetX
@@ -869,7 +871,6 @@ export interface BeTOutline {
 export type BeTRingWidthInterval = '0' | '1' | '2' | '4' | '8' | 'inset'
 export type BeTRingWidth = 'ring' | BeTRingWidthInterval
 export type BeTRingColor = BeTColor
-export type BeTRingOpacity = BeTOpacity
 export type BeTRingOffsetWidth = '0' | '1' | '2' | '4' | '8'
 export type BeTRingOffsetColor = BeTColor
 
@@ -1034,6 +1035,44 @@ export type BeTSvgStroke = 'none' | BeTColor
 export type BeTSvgStrokeWidth = '0' | '1' | '2'
 export type BeTExtTypography = 'prose' | 'sm' | 'lg' | 'xl' | '2xl'
 export type BeTExtTypographyColor = BeTColor
+export type BeTUserSelect = 'none' | 'text' | 'all' | 'auot'
+export type BeTCursor =
+    | 'auto'
+    | 'default'
+    | 'pointer'
+    | 'wait'
+    | 'text'
+    | 'move'
+    | 'help'
+    | 'not-allowed'
+    | 'none'
+    | 'context-menu'
+    | 'progress'
+    | 'cell'
+    | 'crosshair'
+    | 'vertical-text'
+    | 'alias'
+    | 'copy'
+    | 'no-drop'
+    | 'grab'
+    | 'grabbing'
+    | 'all-scroll'
+    | 'col-resize'
+    | 'row-resize'
+    | 'n-resize'
+    | 'e-resize'
+    | 's-resize'
+    | 'w-resize'
+    | 'ne-resize'
+    | 'nw-resize'
+    | 'se-resize'
+    | 'sw-resize'
+    | 'ew-resize'
+    | 'ns-resize'
+    | 'nesw-resize'
+    | 'nwse-resize'
+    | 'zoom-in'
+    | 'zoom-out'
 
 export interface BeTSvg {
     fill: BeTSvgFill

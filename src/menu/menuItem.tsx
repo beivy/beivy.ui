@@ -1,10 +1,9 @@
+import { Button, Link, Text } from '@/be.html'
+import { Box, ThemeContext, ThemeType } from '@/core'
+import { Icon } from '@/icon'
+import { predicateHeight } from '@/utils/be.tw-helper'
 import { Menu } from '@headlessui/react'
 import React, { useCallback, useContext } from 'react'
-import { Button, Link, Text } from '../be.html'
-import { Box } from '../core'
-import { ThemeContext, ThemeType } from '../core/themeProvider'
-import { Icon } from '../icon'
-import { predicateHeight } from '../utils/be.tw-helper'
 import { MenuItemData } from './menu.types'
 
 export interface MenuItemProps extends MenuItemData {

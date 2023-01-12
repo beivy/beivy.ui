@@ -26,8 +26,7 @@ import {
 import { disposables } from './utils/utils/disposables'
 import {
     Focus as FocusManagement,
-    focusIn,
-    getFocusableElements,
+    focusFrom,
     restoreFocusIfNecessary,
     sortByDomNode,
 } from './utils/utils/focus-management'
@@ -45,14 +44,14 @@ export interface ListRenderPropsArg {
 
 type ListPropsWeControl = 'onKeyDown' | 'role' | 'tabIndex'
 
-const DEFAULT_LIST_TAG = 'div'
+const DEFAULT_LIST_TAG = Fragment
 
 enum ActionTypes {
     GoToItem,
-    SelectItem,
-    UnSelectItem,
     RegisterItem,
     UnregisterItem,
+    SelectItem,
+    UnselectItem,
 }
 
 enum ActivationTrigger {
@@ -69,7 +68,7 @@ type ListItemDataRef = MutableRefObject<{
 interface StateDefinition {
     activeItemIndex: number | null
     selectedItemIndex: number | null
-    itemsRef: MutableRefObject<HTMLElement | null>
+    itemsRef: MutableRefObject<HTMLElement | null> | any
     items: {
         id: string
         dataRef: ListItemDataRef
@@ -103,7 +102,7 @@ type Actions =
           id: string
       }
     | {
-          type: ActionTypes.UnSelectItem
+          type: ActionTypes.UnselectItem
       }
 
 const reducers: {
@@ -155,7 +154,7 @@ const reducers: {
             selectedItemIndex,
         }
     },
-    [ActionTypes.UnSelectItem]: (state, action) => {
+    [ActionTypes.UnselectItem]: (state, action) => {
         return {
             ...state,
             selectedItemIndex: null,
@@ -176,19 +175,29 @@ function stateReducer(state: StateDefinition, action: Actions) {
 const _List = forwardRefWithAs(
     <T extends ElementType = typeof DEFAULT_LIST_TAG>(
         props: Props<T, ListRenderPropsArg, ListPropsWeControl> &
-            PropsForFeatures<typeof ListRenderFeatures>,
+            PropsForFeatures<typeof ListRenderFeatures> &
+            ListRenderPropsArg,
         ref: Ref<HTMLElement>,
     ) => {
         const innerId = useId()
         const { id = innerId, selectedItemIndex = null, ...theirProps } = props
-
+        const itemsRef = createRef<HTMLElement>()
         const [state, dispatch] = useReducer(stateReducer, {
-            itemsRef: createRef(),
+            itemsRef: useSyncRefs(ref, itemsRef),
             items: [],
             activeItemIndex: null,
             selectedItemIndex,
             activationTrigger: ActivationTrigger.Other,
         } as StateDefinition)
+
+        useIsoMorphicEffect(() => {
+            if (state.activeItemIndex !== null) {
+                restoreFocusIfNecessary(
+                    state.items[state.activeItemIndex].dataRef.current?.domRef
+                        .current,
+                )
+            }
+        }, [state.activeItemIndex])
 
         const handleKeyDown = useEvent(
             (event: KeyboardEvent<HTMLButtonElement>) => {
@@ -197,59 +206,42 @@ const _List = forwardRefWithAs(
 
                     case Keys.Space:
                     case Keys.Enter:
-                        event.preventDefault()
+                        // event.preventDefault()
                         event.stopPropagation()
                         if (state.activeItemIndex !== null) {
-                            let { dataRef, id } =
-                                state.items[state.activeItemIndex]
+                            let { dataRef } = state.items[state.activeItemIndex]
                             dataRef.current?.domRef.current?.click()
-                            dispatch({ type: ActionTypes.SelectItem, id })
-                            restoreFocusIfNecessary(state.itemsRef.current)
+                            dispatch({
+                                type: ActionTypes.SelectItem,
+                                id: state.items[state.activeItemIndex].id,
+                            })
                         }
                         break
                     case Keys.Escape:
                         event.preventDefault()
                         event.stopPropagation()
-                        if (state.selectedItemIndex !== null) {
-                            dispatch({ type: ActionTypes.UnSelectItem })
+                        if (state.activeItemIndex !== null) {
+                            restoreFocusIfNecessary(
+                                state.items[state.activeItemIndex].dataRef
+                                    .current?.domRef?.current,
+                            )
+                            dispatch({
+                                type: ActionTypes.UnselectItem,
+                            })
                         }
                         break
                     case Keys.Tab:
                         event.preventDefault()
                         event.stopPropagation()
-                        if (state.selectedItemIndex !== null) {
-                            const from =
-                                state.items[state.selectedItemIndex].dataRef
-                                    .current?.domRef
-                            // console.log(
-                            //     '====>',
-                            //     from.current,
-                            //     getFocusableElements(from.current),
-                            // )
-                            disposables().nextFrame(() => {
-                                focusIn(
-                                    getFocusableElements(from.current),
-                                    FocusManagement.Next |
-                                        FocusManagement.WrapAround,
-                                )
-                            })
-                            break
-                        }
-                        disposables().nextFrame(() =>
-                            focusIn(
-                                state.items
-                                    .map(
-                                        (v) =>
-                                            v.dataRef.current?.domRef.current,
-                                    )
-                                    .filter((v) => v !== null) as HTMLElement[],
-                                // from.current,
+
+                        disposables().nextFrame(() => {
+                            focusFrom(
+                                state.itemsRef.current,
                                 event.shiftKey
                                     ? FocusManagement.Previous
                                     : FocusManagement.Next,
-                                // FocusManagement.Next,
-                            ),
-                        )
+                            )
+                        })
                         break
                     case Keys.ArrowUp:
                         event.preventDefault()
@@ -277,12 +269,12 @@ const _List = forwardRefWithAs(
             id,
             onKeyDown: handleKeyDown,
             role: 'list',
-            tabIndex: 0,
-            ref: ref,
+            tabIndex: -1,
+            ref: itemsRef,
         }
 
         const slot = useMemo<ListRenderPropsArg>(
-            () => ({ selectedItemIndex }),
+            () => ({ selectedItemIndex: state.selectedItemIndex }),
             [selectedItemIndex],
         )
 
@@ -335,13 +327,17 @@ const _Item = forwardRefWithAs(
         const [state, dispatch] = useListContext('List.Item')
         const active =
             state.activeItemIndex !== null
-                ? state.items[state.activeItemIndex].id === id
+                ? state.items[state.activeItemIndex]?.id === id
                 : false
-
         const selected =
             state.selectedItemIndex !== null
-                ? state.items[state.selectedItemIndex].id === id
+                ? state.items[state.selectedItemIndex]?.id === id
                 : false
+
+        // const selected =
+        //     state.selectedItemIndex !== null
+        //         ? state.items[state.selectedItemIndex].id === id
+        //         : false
         const internalItemRef = useRef<HTMLElement | null>(null)
         const itemRef = useSyncRefs(ref, internalItemRef)
 
@@ -386,7 +382,9 @@ const _Item = forwardRefWithAs(
 
         const pointer = useTrackedPointer()
 
-        const handleEnter = useEvent((evt) => pointer.update(evt))
+        const handleEnter = useEvent((evt) => {
+            pointer.update(evt)
+        })
 
         const handleMove = useEvent((evt) => {
             if (!pointer.wasMoved(evt)) return
@@ -410,7 +408,9 @@ const _Item = forwardRefWithAs(
         const handleClick = useEvent((evt) => {
             if (disabled) return evt.preventDefault()
             dispatch({ type: ActionTypes.SelectItem, id })
-            restoreFocusIfNecessary(state.itemsRef.current)
+            if (state.activationTrigger === ActivationTrigger.Other) {
+                restoreFocusIfNecessary(state.itemsRef.current)
+            }
         })
 
         const slot = useMemo<ItemRenderPropArg>(
@@ -422,7 +422,7 @@ const _Item = forwardRefWithAs(
             id,
             ref: itemRef,
             role: 'listitem',
-            tabIndex: selected === true ? undefined : -1,
+            tabIndex: disabled === true ? undefined : 0,
             'aria-disabled': disabled === true ? true : undefined,
             disabled: undefined,
             onClick: handleClick,
@@ -448,7 +448,7 @@ const _Item = forwardRefWithAs(
 export const List = Object.assign(_List, { Item: _Item })
 
 /**
- *
+ * Sort the state items via DOM node order.
  */
 function adjustOrderedState(
     state: StateDefinition,
@@ -489,3 +489,5 @@ function useListContext(component: string) {
     }
     return context
 }
+
+function calculateNextActiveItem(focus: Focus) {}

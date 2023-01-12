@@ -73,7 +73,6 @@ export const Menu: React.FC<Menu> = ({ label, items }) => {
                             $shadow="lg"
                             $ringWidth="1"
                             $ringColor="ext-black"
-                            $ringOpacity="5"
                             focus$outlineWidth="none"
                         >
                             <Box $direction="col">{menuItems}</Box>

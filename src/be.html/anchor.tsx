@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 import {
-    CommonFormElementProps,
+    CommonElementProps,
     PseudoState,
     Screen,
     TextProps,
@@ -9,7 +9,7 @@ import { twClass } from '../utils'
 
 export interface LinkProps
     extends React.ComponentPropsWithoutRef<'a'>,
-        CommonFormElementProps,
+        CommonElementProps,
         Partial<TextProps>,
         Partial<Screen<TextProps>>,
         Partial<PseudoState<TextProps>> {}

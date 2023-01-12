@@ -1,5 +1,5 @@
+import { ThemeProvider } from '@/core'
 import { MenuItem } from '../'
-import ThemeProvider from '../../core/themeProvider'
 import { HeadlessMenu } from '../impl/menu'
 
 export default {

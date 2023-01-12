@@ -114,10 +114,20 @@ export function isFocusableElement(
 
 export function restoreFocusIfNecessary(element: HTMLElement | null) {
     let ownerDocument = getOwnerDocument(element)
+    // console.log(
+    //     '====>',
+    //     element,
+    //     ownerDocument,
+    //     ownerDocument &&
+    //         isFocusableElement(
+    //             ownerDocument.activeElement as HTMLElement,
+    //             FocusableMode.Strict,
+    //         ),
+    // )
     disposables().nextFrame(() => {
         if (
             ownerDocument &&
-            !isFocusableElement(
+            isFocusableElement(
                 ownerDocument.activeElement as HTMLElement,
                 FocusableMode.Strict,
             )
