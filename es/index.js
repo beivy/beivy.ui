@@ -1,5 +1,5 @@
 import { jsx, jsxs, Fragment as Fragment$1 } from 'react/jsx-runtime';
-import React, { forwardRef, useMemo, createContext, useContext, useEffect, useLayoutEffect, useRef, Fragment, isValidElement, cloneElement, createElement, useId, createRef, useReducer, useCallback, useState } from 'react';
+import React, { forwardRef, useMemo, createContext, useState, useEffect, useContext, useLayoutEffect, useRef, Fragment, isValidElement, cloneElement, createElement, useId, createRef, useReducer, useCallback } from 'react';
 import * as tc from 'tailwindcss-classnames';
 import * as R from 'ramda';
 import { mergeAll } from 'ramda';
@@ -142,6 +142,10 @@ const BeTWPrefixes = {
     },
     $left: {
         prefix: 'left',
+        extra: {},
+    },
+    $zIndex: {
+        prefix: 'z',
         extra: {},
     },
     $flexBasis: {
@@ -829,6 +833,10 @@ const twTransfer = {
         name: '$left',
         tcFunc: tc.inset,
     }),
+    $zIndex: twIntervalTransferFactory({
+        name: '$zIndex',
+        tcFunc: tc.zIndex,
+    }),
     $margin: twIntervalTransferFactory({
         name: '$margin',
         tcFunc: tc.margin,
@@ -1443,7 +1451,7 @@ forwardRef(({ children, ...props }, ref) => {
     const { classNames, ...restProps } = twClass(props);
     return (jsx("input", { className: classNames, ...restProps, ref: ref, type: "search" }));
 });
-forwardRef(({ children, ...props }, ref) => {
+const TextArea = forwardRef(({ children, ...props }, ref) => {
     const { classNames, ...restProps } = twClass(props);
     return jsx("textarea", { className: classNames, ...restProps, ref: ref });
 });
@@ -1451,6 +1459,15 @@ forwardRef(({ children, ...props }, ref) => {
 const Label = ({ children, ...props }) => {
     const { classNames, ...restProps } = twClass(props);
     return (jsx("label", { className: classNames, ...restProps, children: children }));
+};
+
+const UL = ({ children, ...props }) => {
+    const { classNames, ...restProps } = useMemo(() => twClass(props), [props]);
+    return (jsx("ul", { className: classNames, ...restProps, children: children }));
+};
+const LI = ({ children, ...props }) => {
+    const { classNames, ...restProps } = useMemo(() => twClass(props), [props]);
+    return (jsx("li", { className: classNames, ...restProps, children: children }));
 };
 
 const Span = ({ children, ...props }) => {
@@ -1463,27 +1480,27 @@ const Div = ({ children, ...props }) => {
 };
 
 const H1 = ({ children, ...props }) => {
-    const { classNames, ...restProps } = twClass(props);
+    const { classNames, ...restProps } = useMemo(() => twClass(props), [props]);
     return (jsx("h1", { className: classNames, ...restProps, children: children }));
 };
 const H2 = ({ children, ...props }) => {
-    const { classNames, ...restProps } = twClass(props);
+    const { classNames, ...restProps } = useMemo(() => twClass(props), [props]);
     return (jsx("h2", { className: classNames, ...restProps, children: children }));
 };
 const H3 = ({ children, ...props }) => {
-    const { classNames, ...restProps } = twClass(props);
+    const { classNames, ...restProps } = useMemo(() => twClass(props), [props]);
     return (jsx("h3", { className: classNames, ...restProps, children: children }));
 };
 const H4 = ({ children, ...props }) => {
-    const { classNames, ...restProps } = twClass(props);
+    const { classNames, ...restProps } = useMemo(() => twClass(props), [props]);
     return (jsx("h4", { className: classNames, ...restProps, children: children }));
 };
 const H5 = ({ children, ...props }) => {
-    const { classNames, ...restProps } = twClass(props);
+    const { classNames, ...restProps } = useMemo(() => twClass(props), [props]);
     return (jsx("h5", { className: classNames, ...restProps, children: children }));
 };
 const Text = ({ children, ...props }) => {
-    const { classNames, ...restProps } = twClass(props);
+    const { classNames, ...restProps } = useMemo(() => twClass(props), [props]);
     return (jsx("p", { className: classNames, ...restProps, children: children }));
 };
 
@@ -1550,11 +1567,11 @@ const Column = forwardRef(({ children, ...props }, ref) => {
 });
 
 const __Grid = forwardRef(({ children, ...props }, ref) => {
-    const { classNames, ...restProps } = twGrid(props);
+    const { classNames, ...restProps } = useMemo(() => twGrid(props), [props]);
     return (jsx("div", { className: classNames, ...restProps, ref: ref, children: children }));
 });
 const __GridItem = ({ children, ...props }) => {
-    const { classNames, ...restProps } = twGridItem(props);
+    const { classNames, ...restProps } = useMemo(() => twGridItem(props), [props]);
     return (jsx("div", { className: classNames, ...restProps, children: children }));
 };
 const Grid = Object.assign(__Grid, { Item: __GridItem });
@@ -1798,6 +1815,20 @@ const Theme = {
     ui: {
         caption: 'caption-400',
         description: 'content-300',
+        error: {
+            title: {
+                $fontSize: 'lg',
+                $fontWeight: 'semibold',
+                $lineHeight: '7',
+                $textColor: 'error-400',
+            },
+            content: {
+                $fontSize: 'base',
+                $fontWeight: 'normal',
+                $textColor: 'error-300',
+                $lineHeight: '4',
+            },
+        },
         icon: {
             normal: {},
             selected: {},
@@ -1814,6 +1845,9 @@ const Theme = {
             },
             inactive: {
                 $textColor: 'neutral-500',
+            },
+            disabled: {
+                $textColor: 'neutral-300',
             },
         },
     },
@@ -1832,6 +1866,91 @@ const Avatar = ({ alt, src, $width, $height }) => {
     }
     return (jsx(Box, { "$display": "inline-flex", "$bgColor": "primary", "$width": width, "$height": height, "$borderRadius": "full", "$textColor": "neutral-100", "$justifyContent": "center", "$alignItems": "center", "$alignContent": "center", children: jsx(Span, { "$display": "block", children: alt?.charAt(0) }) }));
 };
+
+class StreamProcessor {
+    data;
+    option;
+    __errors;
+    status;
+    __idx;
+    consumers;
+    constructor(opts) {
+        this.data = [];
+        this.option = Object.assign({
+            chinkSize: 1,
+        }, opts);
+        this.consumers = [];
+        this.__errors = [];
+        this.status = undefined;
+        this.__idx = 0;
+    }
+    addData(data) {
+        const itemToAdd = Array.isArray(data) ? data : [data];
+        Array.prototype.push.apply(this.data, itemToAdd);
+    }
+    registerConsumer(name, consumer) {
+        this.consumers.push({
+            name,
+            func: consumer,
+        });
+    }
+    async process(progress) {
+        if (this.status === 'settled') {
+            if (progress) {
+                return progress(this.remained(), this.errors());
+            }
+            return;
+        }
+        let chunk = this.data.splice(0, this.option.chunkSize);
+        while (chunk.length > 0) {
+            const rsts = await Promise.allSettled(this.consumers.map((consumer) => consumer.func(chunk).catch((err) => {
+                const msg = `${this.__idx + 1}件目から${this.option.chunkSize}件データの処理中にエラーが起きました。`;
+                console.warn(msg, err);
+                return Promise.reject(msg);
+            })));
+            rsts.forEach((rst) => {
+                if (rst.status === 'rejected') {
+                    this.__errors.push(rst.reason);
+                }
+            });
+            if (progress) {
+                progress(this.remained(), this.errors());
+            }
+            chunk = this.data.splice(0, this.option.chunkSize);
+            this.__idx = this.__idx + chunk.length;
+        }
+        this.status = 'settled';
+    }
+    remained() {
+        return this.data.length;
+    }
+    errors() {
+        return this.__errors;
+    }
+}
+function useStream(data, options, consumer, consumerName) {
+    const [progress, setProgress] = useState({
+        processed: null,
+        errors: [],
+    });
+    console.log('====>stream', data);
+    useEffect(() => {
+        if (!data) {
+            return;
+        }
+        const name = consumerName ?? consumer.name;
+        const stream = new StreamProcessor(options);
+        stream.addData(data);
+        stream.registerConsumer(name, consumer);
+        stream.process((remained, errors) => {
+            setProgress({
+                processed: data.length - remained,
+                errors: [...errors],
+            });
+        });
+    }, [data]);
+    return progress;
+}
 
 const useTheme = () => {
     return useContext(ThemeContext);
@@ -2706,6 +2825,10 @@ const _List = forwardRefWithAs((props, ref) => {
     });
     useIsoMorphicEffect(() => {
         if (state.activeItemIndex !== null) {
+            dispatch({
+                type: ActionTypes.SelectItem,
+                id: state.items[state.activeItemIndex].id,
+            });
             restoreFocusIfNecessary(state.items[state.activeItemIndex].dataRef.current?.domRef
                 .current);
         }
@@ -3152,7 +3275,7 @@ const buildIconStyle = (type, size, outline, theme) => {
         { $height: iconHeight },
     ]);
 };
-const Button = forwardRef(({ children, type = 'primary', size = 'medium', outline = false, leftIcon, rightIcon, ...restProps }, ref) => {
+const Button = forwardRef(({ children, type = 'primary', size = 'medium', outline = false, submit = false, leftIcon, rightIcon, ...restProps }, ref) => {
     const theme = useTheme();
     const buttonStyle = useMemo(() => {
         return buildButtonStyle(type, size, outline, theme);
@@ -3163,7 +3286,7 @@ const Button = forwardRef(({ children, type = 'primary', size = 'medium', outlin
     /**
      * hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2
      */
-    return (jsx(Button$1, { ...buttonStyle, ...restProps, "focus$outlineWidth": "none", "focus$ringWidth": "2", "focus$ringOffsetWidth": "2", "focus$ringColor": "primary", "$width": "fit", ref: ref, children: jsxs(Box, { "$flex": "initial", inline: true, children: [leftIconContent, children, rightIconContent] }) }));
+    return (jsx(Button$1, { ...buttonStyle, ...restProps, type: submit ? 'submit' : 'button', "focus$outlineWidth": "none", "focus$ringWidth": "2", "focus$ringOffsetWidth": "2", "focus$ringColor": "primary", "$width": "fit", ref: ref, children: jsxs(Box, { "$flex": "initial", inline: true, children: [leftIconContent, children, rightIconContent] }) }));
 });
 
 const Card = forwardRef(({ data, children, actions, style = (_) => ({}), ...props }, ref) => {
@@ -3211,8 +3334,7 @@ const CardButton = forwardRef(({ icon, label, description, style, ...restProps }
     const theme = useTheme();
     const labelStyle = theme.typography['caption-500'];
     const descStyle = theme.typography['caption-300'];
-    const iconHeight = predicateHeight(labelStyle.$lineHeight);
-    return (jsx(Button$1, { ...style, ...restProps, "$padding": "2", ref: ref, children: jsxs(Box, { "$direction": "row", "$gap": "6", "$alignItems": "center", children: [jsx(Box, { "$bgColor": "info-400", "$borderRadius": "full", "$width": iconHeight, "$padding": "2", children: jsx(Icon, { type: icon, "$fill": "neutral-600", "$height": iconHeight }) }), jsxs(Box, { "$direction": "col", children: [jsx(Text, { ...descStyle, children: description }), jsx(Text, { ...labelStyle, children: label })] })] }) }));
+    return (jsx(Button$1, { ...style, ...restProps, "$padding": "2", ref: ref, children: jsxs(Box, { "$direction": "row", "$gap": "6", "$alignItems": "center", children: [jsx(Box, { "$bgColor": "info-400", "$borderRadius": "full", "$width": "10", "$height": "10", "$padding": "1.5", children: jsx(Icon, { type: icon, "$fill": "neutral-600", "$height": "8", "$width": "8" }) }), jsxs(Box, { "$direction": "col", children: [jsx(Text, { ...descStyle, children: description }), jsx(Text, { ...labelStyle, children: label })] })] }) }));
 });
 
 const beStyleAttrTree = (props) => {
@@ -3432,8 +3554,8 @@ var Checkbox = forwardRef((props, forwardedRef) => {
         return predicateHeight(typo.$lineHeight, typo.$fontSize);
     }, [theme, captionTypo]);
     const contents = [
-        jsx(Box, { "$height": checkboxHeight, "$alignItems": "center", children: jsx(Input$1, { id: rId, type: "checkbox", "$borderRadius": "rounded", "$borderColor": "neutral-300", "$textColor": "primary", name: name, value: value, ...checkboxProps, ref: itemRef }) }, `${rId}_input`),
-        jsxs(Box, { ...contentsStyle, ...captionTypo, children: [label && jsx(Label, { htmlFor: rId, children: label }), description && jsx(Text, { ...descriptionTypo, children: description })] }, `${rId}_label`),
+        jsx(Box, { "$height": checkboxHeight, "$alignItems": "center", children: jsx(Input$1, { id: rId, type: "checkbox", "$borderRadius": "rounded", "$borderColor": "neutral-300", "$textColor": "primary", "$cursor": "pointer", name: name, value: value, ...checkboxProps, ref: itemRef }) }, `${rId}_input`),
+        jsxs(Box, { ...contentsStyle, ...captionTypo, children: [label && (jsx(Label, { htmlFor: rId, "$cursor": "pointer", children: label })), description && jsx(Text, { ...descriptionTypo, children: description })] }, `${rId}_label`),
     ];
     return (jsx(Box, { "$direction": "row", "$gap": "x-2", "$justifyItems": "start", "$alignItems": "start", ...style, children: contentsStyle.$a__reverse ? contents.reverse() : contents }));
 });
@@ -3451,41 +3573,152 @@ const CheckboxGroup = (props) => {
     return (jsx(Box, { ...styles, className: classNames, "$flexWrap": "wrap", "$height": "auto", children: __options }));
 };
 
-const FileUploader = forwardRef(({ onFileAccepted = (files) => { }, ...props }, ref) => {
+const LinearProgress = ({ progress = 0, ...props }) => {
+    // return (
+    //     <div className="bg-neutral-200 h-2 w-full rounded-full overflow-hidden">
+    //         <div
+    //             className="bg-primary-400  h-2 rounded-full"
+    //             style={{ width: '50%' }}
+    //         ></div>
+    //     </div>
+    // )
+    return (jsx(Div, { "$bgColor": "neutral-200", "$height": "2", "$width": "full", "$borderRadius": "full", "$overflow": "hidden", children: jsx(Div, { "$bgColor": "primary-400", "$height": "2", "lg$borderRadius": "full", style: {
+                width: progress * 100 + '%',
+            } }) }));
+};
+
+const FileUploader = forwardRef(({ onFileAccepted = (files) => { }, disabled = false, ...props }, ref) => {
     const theme = useTheme();
     const captionStyle = theme.typography[theme.ui.caption];
     const iconHeight = predicateHeight(captionStyle.$lineHeight);
     const onDrop = (acceptFiles) => {
         onFileAccepted(acceptFiles);
     };
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    const { getRootProps, getInputProps } = useDropzone({
         onDrop,
     });
-    return (jsxs(Box, { ...getRootProps({ className: 'dropzone' }), ...props, children: [jsx(Input$1, { ...getInputProps(), ref: ref }), jsxs(Box, { "$direction": "col", "$justifyContent": "center", "$alignItems": "center", "$width": "full", "$height": "full", "$borderRadius": "md", "$borderWidth": "2", "$borderColor": "neutral-300", "$borderStyle": "dashed", "$cursor": "pointer", "hover$borderColor": "primary-300", children: [jsx(Text, { ...captionStyle, children: "\u30D5\u30A1\u30A4\u30EB\u3092\u30C9\u30E9\u30C3\u30B0\uFF06\u30C9\u30ED\u30C3\u30D7" }), jsx(Text, { ...captionStyle, children: "\u3082\u3057\u304F\u306F\u3053\u3053\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u30D5\u30A1\u30A4\u30EB\u3092\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044\u3002" }), jsx(Icon, { type: "Upload", "$width": iconHeight, "$height": iconHeight, "$fill": captionStyle.$textColor })] })] }));
+    const textStyle = (disabled) => {
+        return disabled
+            ? {
+                ...captionStyle,
+                $textColor: theme.ui.text.disabled.$textColor,
+            }
+            : captionStyle;
+    };
+    const rootProps = disabled ? {} : getRootProps({ className: 'dropzon' });
+    const inputProps = getInputProps();
+    const cursorStyle = disabled
+        ? {}
+        : { $cursor: 'pointer' };
+    return (jsxs(Box, { ...rootProps, ...props, children: [jsx(Input$1, { ...inputProps, ref: ref }), jsxs(Box, { "$direction": "col", "$justifyContent": "center", "$alignItems": "center", "$width": "full", "$height": "full", "$borderRadius": "md", "$borderWidth": "2", "$borderColor": "neutral-300", "$borderStyle": "dashed", "hover$borderColor": "primary-300", ...cursorStyle, children: [jsx(Text, { ...textStyle(disabled), children: "\u30D5\u30A1\u30A4\u30EB\u3092\u30C9\u30E9\u30C3\u30B0\uFF06\u30C9\u30ED\u30C3\u30D7" }), jsx(Text, { ...textStyle(disabled), children: "\u3082\u3057\u304F\u306F\u3053\u3053\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u30D5\u30A1\u30A4\u30EB\u3092\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044\u3002" }), jsx(Icon, { type: "Upload", "$width": iconHeight, "$height": iconHeight, "$fill": textStyle(disabled).$textColor })] })] }));
 });
 
-const CSVFileUploader = ({ onData, onProgress, ...props }) => {
+var FileUploadStatus;
+(function (FileUploadStatus) {
+    FileUploadStatus[FileUploadStatus["prepared"] = 0] = "prepared";
+    FileUploadStatus[FileUploadStatus["loading"] = 1] = "loading";
+    FileUploadStatus[FileUploadStatus["parseError"] = 2] = "parseError";
+    FileUploadStatus[FileUploadStatus["completed"] = 4] = "completed";
+    FileUploadStatus[FileUploadStatus["failed"] = 8] = "failed";
+})(FileUploadStatus || (FileUploadStatus = {}));
+const CSVFileUploader = ({ option, consumer, onFileUploadStart, onFileUploadCompleted, consumerName, ...props }) => {
+    const theme = useTheme();
+    const [data, setData] = useState(null);
+    const [file, setFile] = useState(null);
+    const [status, setStatus] = useState(FileUploadStatus.prepared);
+    const [parseError, setParseError] = useState(null);
+    const [beforeError, setBeforeError] = useState(null);
+    const [completedError, setCompletedError] = useState(null);
+    const reset = () => {
+        setData(null);
+        setFile(null);
+        setParseError(null);
+        setStatus(FileUploadStatus.prepared);
+    };
     const onFiles = useCallback((file) => {
         const reader = new FileReader();
         if (!file || file.length < 1) {
             console.log('empty file');
             return;
         }
+        setFile(file[0]);
         reader.readAsText(file[0]);
-        reader.onload = () => {
+        reader.onload = async () => {
             const csvString = reader.result;
             if (!csvString) {
                 console.log(`empty file`);
                 return;
             }
-            const csvData = parse(csvString, { header: true });
-            onData && onData(csvData);
+            const parseResult = parse(csvString, {
+                header: true,
+                skipEmptyLines: true,
+            });
+            if (parseResult.errors.length > 0) {
+                setParseError(parseResult.errors);
+                setStatus(FileUploadStatus.parseError);
+                return;
+            }
+            setStatus(FileUploadStatus.loading);
+            if (!!onFileUploadStart) {
+                try {
+                    await onFileUploadStart(data);
+                }
+                catch (err) {
+                    setBeforeError(err.message || '');
+                }
+            }
+            setData(parseResult.data);
         };
-        reader.onprogress = (e) => {
-            onProgress && onProgress(e);
+        reader.onprogress = (e) => { };
+        reader.onerror = (err) => {
+            console.log(err);
+        };
+        reader.onabort = (abortEvt) => {
+            console.log(abortEvt);
         };
     }, []);
-    return jsx(FileUploader, { ...props, onFileAccepted: onFiles });
+    const { processed, errors } = useStream(data, option, consumer, consumerName);
+    useEffect(() => {
+        if ((errors && errors.length > 0) ||
+            beforeError !== null ||
+            completedError !== null) {
+            setStatus(FileUploadStatus.failed);
+        }
+        else if (processed === data?.length) {
+            setStatus(FileUploadStatus.completed);
+        }
+    }, [processed, beforeError, completedError, errors]);
+    useEffect(() => {
+        let timeoutHandler;
+        if (status === FileUploadStatus.completed) {
+            timeoutHandler = setTimeout(reset, 3000);
+        }
+        return () => {
+            if (timeoutHandler) {
+                clearTimeout(timeoutHandler);
+            }
+        };
+    }, [status]);
+    useEffect(() => {
+        if (status === FileUploadStatus.completed ||
+            status === FileUploadStatus.failed) {
+            if (!!onFileUploadCompleted) {
+                onFileUploadCompleted(data);
+            }
+        }
+    }, [status]);
+    const errorContents = useMemo(() => {
+        return (jsxs(Fragment$1, { children: [jsxs(H3, { ...theme.ui.error.title, children: ["Oops: \u30D5\u30A1\u30A4\u30EB\uFF08", file?.name || '', "\uFF09\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u4E2D\u306B\u30A8\u30E9\u30FC\u304C\u3042\u308A\u307E\u3057\u305F\u3002", jsx(Button, { type: "secondary", onClick: reset, size: "small", outline: true, children: "\u30EA\u30C8\u30E9\u30A4" })] }), jsxs(UL, { ...theme.ui.error.content, children: [beforeError !== null && (jsxs(LI, { children: ["\u30D5\u30A1\u30A4\u30EB\u30ED\u30FC\u30C9\u306E\u524D\u51E6\u7406\u306B\u30A8\u30E9\u30FC\u304C\u3042\u308A\u307E\u3057\u305F(", beforeError, ")"] }, "before_load_error")), completedError !== null && (jsxs(LI, { children: ["\u30D5\u30A1\u30A4\u30EB\u30ED\u30FC\u30C9\u306E\u5F8C\u51E6\u7406\u306B\u30A8\u30E9\u30FC\u304C\u3042\u308A\u307E\u3057\u305F(", completedError, ")"] }, "completed_load_error")), errors.map((err, idx) => {
+                            return jsx(LI, { children: err }, `err_${idx}`);
+                        })] })] }));
+    }, [errors, beforeError, completedError]);
+    const counter = processed && processed > 0 ? `${processed} / ${data?.length}` : '';
+    return (jsx(Box, { "$direction": "col", "$gap": "1", children: jsxs(Fragment$1, { children: [jsx(FileUploader, { ...props, onFileAccepted: onFiles, disabled: status !== FileUploadStatus.prepared }), parseError && (jsxs(Box, { "$direction": "col", "$gap": "1", children: [jsxs(H3, { ...theme.ui.error.title, children: ["Oops: CSV\u30D1\u30FC\u30B9\u30A8\u30E9\u30FC:", ' ', jsx(Button, { type: "secondary", onClick: reset, size: "small", outline: true, children: "\u30EA\u30C8\u30E9\u30A4" })] }), jsx(UL, { ...theme.ui.error.content, children: parseError.map((err) => {
+                                return (jsx(LI, { children: err.message }, `${err.code}`));
+                            }) })] })), !!(status &&
+                    FileUploadStatus.loading | FileUploadStatus.completed) && (jsxs(Fragment$1, { children: [jsxs(H3, { ...theme.typography[theme.ui.caption], children: ["\u30D5\u30A1\u30A4\u30EB\uFF08 ", file?.name || '', "\uFF09\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u4E2D", counter] }), jsx(LinearProgress, { progress: processed != null && data != null
+                                ? processed / data.length
+                                : 0 })] })), status === FileUploadStatus.failed && errorContents] }) }));
 };
 
 const nodes = {
@@ -3509,8 +3742,11 @@ const Heading = ({ children, title, as = 'H1' }) => {
 };
 
 const Input = forwardRef((props, ref) => {
-    const { name, label, placeholder = '', value, $a__vertical = false, } = props;
-    const [err, setErr] = useState();
+    const { type = 'text', name, label, placeholder = '', $a__vertical = false, errors, ...restProps } = props;
+    const [err, setErr] = useState(errors);
+    useEffect(() => {
+        setErr(errors);
+    }, [errors]);
     const theme = useTheme();
     const captionStyle = theme.typography[theme.ui.caption];
     const errStyle = useMemo(() => err
@@ -3522,6 +3758,10 @@ const Input = forwardRef((props, ref) => {
             focus$ringColor: 'error-500',
         }
         : {}, [err]);
+    const errMsgStyle = {
+        ...captionStyle,
+        $textColor: 'error-900',
+    };
     const errAriaAttrs = useMemo(() => err
         ? {
             ['aria-invalid']: true,
@@ -3549,7 +3789,7 @@ const Input = forwardRef((props, ref) => {
             $direction: 'row',
             $gap: 'x-2',
         }, []);
-    return (jsxs(Box, { ...arrangement, "$width": "full", "$flex": "initial", "$justifyItems": "stretch", children: [jsx(Label, { htmlFor: name, "$width": "fit", ...captionStyle, children: label }), jsx(Input$1, { type: "text", name: name, id: name, placeholder: placeholder, ...inputStyle, ...errStyle, ...errAriaAttrs, ref: ref })] }));
+    return (jsxs(Box, { ...arrangement, "$width": "full", "$flex": "initial", "$justifyItems": "stretch", children: [jsx(Label, { htmlFor: name, "$width": "fit", ...captionStyle, children: label }), jsxs(Box, { "$direction": "col", "$gap": "0.5", children: [jsx(Input$1, { type: type, name: name, id: name, placeholder: placeholder, ...inputStyle, ...errStyle, ...errAriaAttrs, ...restProps, ref: ref }), err && err.message && (jsx(Text, { ...errMsgStyle, children: err.message }))] })] }));
 });
 
 const __HeadlessMenu = ({ children, ...props }) => {
@@ -3659,8 +3899,12 @@ const NumInfo = forwardRef(({ num, precision = 2, description = '', actions, ...
         const max = 10 ** precision - 1;
         return num > max ? max.toString() + '+' : num.toString();
     };
-    return (jsxs(Section, { className: classNames, "$gap": "4", "$padding": "4", "$alignItems": "center", "$justifyContent": "center", "$maxWidth": "xs", "$width": "fit", "$borderRadius": "md", ...style, ...restProps, ref: ref, children: [jsx(Text, { ...numStyle, children: precisedNum(num, precision) }), jsxs(Box, { "$direction": "col", "$gap": "2", "$alignItems": "end", children: [jsx(H3, { ...descriptionStyle, children: description }), actions] })] }));
+    return (jsxs(Section, { className: classNames, "$gap": "4", "$padding": "4", "$alignItems": "start", "$justifyContent": "center", "$maxWidth": "xs", "$width": "fit", "$borderRadius": "md", ...style, ...restProps, ref: ref, children: [jsx(Text, { ...numStyle, children: precisedNum(num, precision) }), jsxs(Box, { "$direction": "col", "$gap": "2", "$alignItems": "end", children: [jsx(H3, { ...descriptionStyle, children: description }), actions] })] }));
 });
+
+const Panel = ({ show, children, ...props }) => {
+    return (jsx(Transition, { show: show, enter: "transition-opacity duration-75", enterFrom: "opacity-0", enterTo: "opacity-100", leave: "transition-opacity duration-150", leaveFrom: "opacity-100", leaveTo: "opacity-0", children: jsx(Box, { ...props, children: children }) }));
+};
 
 const __Listbox = ({ children, value, ...props }) => {
     const { classNames, ...restProps } = useMemo(() => twClass(props), [props]);
@@ -3669,8 +3913,8 @@ const __Listbox = ({ children, value, ...props }) => {
 const __ListboxButton = forwardRef(({ children, ...props }, ref) => {
     const { classNames, ...restProps } = useMemo(() => twClass(props), [props]);
     const theme = useTheme();
-    theme.typography[theme.ui.caption];
-    return (jsx(Listbox.Button, { className: classNames, ...restProps, ref: ref, children: ({ open }) => (jsxs(Stack, { children: [children, jsx(Stack.Item, { "$top": "-3", "$right": "0", children: open ? (jsx(Icon, { type: "ChevronUp", "$height": "6", "$width": "6", "$fill": "neutral-400", "aria-hidden": "true" })) : (jsx(Icon, { type: "ChevronDown", "$height": "6", "$width": "6", "$fill": "neutral-400", "aria-hidden": "true" })) })] })) }));
+    const captionTypo = theme.typography[theme.ui.caption];
+    return (jsx(Listbox.Button, { className: classNames, "$display": "flex", "$width": "full", "$height": "full", ...restProps, ref: ref, children: ({ open }) => (jsxs(Box, { "$direction": "row", "$justifyContent": "between", "$alignItems": "center", "$width": "full", "$height": "full", children: [jsx(Box, { ...captionTypo, children: children }), jsx(Box, { children: open ? (jsx(Icon, { type: "ChevronUp", "$height": "6", "$width": "6", "$fill": "neutral-400", "aria-hidden": "true" })) : (jsx(Icon, { type: "ChevronDown", "$height": "6", "$width": "6", "$fill": "neutral-400", "aria-hidden": "true" })) })] })) }));
 });
 const __ListboxOptions = forwardRef(({ children, ...props }, ref) => {
     const { classNames, ...restProps } = useMemo(() => twClass(props), [props]);
@@ -3703,15 +3947,19 @@ var SelectMode;
     SelectMode[SelectMode["Single"] = 0] = "Single";
     SelectMode[SelectMode["Multi"] = 1] = "Multi";
 })(SelectMode || (SelectMode = {}));
-const Select = forwardRef(({ data, mode = SelectMode.Single, $width, $minWidth, $bgColor, ...props }, ref) => {
+const Select = forwardRef(({ data, mode = SelectMode.Single, $width, $minWidth, $bgColor, defaultValue, onChange, ...props }, ref) => {
     useTheme();
-    const [selectedData, setSelectedData] = useState();
-    return (jsxs(HeadlessSelect, { value: selectedData, onChange: setSelectedData, multiple: mode === SelectMode.Multi, "$bgColor": "neutral-300", ...props, children: [jsx(HeadlessSelect.Button, { "$width": $width, "$height": "8", children: jsx(Span, { "$display": "block", children: Array.isArray(selectedData)
+    const [selectedData, setSelectedData] = useState(data[0]);
+    const onChangeHandler = useCallback((v) => {
+        setSelectedData(v);
+        onChange && onChange(v);
+    }, [onChange]);
+    return (jsxs(HeadlessSelect, { defaultValue: defaultValue, onChange: onChangeHandler, multiple: mode === SelectMode.Multi, "$bgColor": "neutral-300", ...props, children: [jsx(HeadlessSelect.Button, { "$width": $width, "$height": "full", children: jsx(Span, { "$display": "block", children: Array.isArray(selectedData)
                         ? selectedData.map((v) => v.label).join(',')
-                        : selectedData?.label || '' }) }), jsx(Transition, { as: Fragment, leave: "transition ease-in duration-100", leaveFrom: "opacity-100", leaveTo: "opacity-0", children: jsx(HeadlessSelect.Options, { "$position": "absolute", "$margin": { top: '1' }, "$maxHeight": "60", "$bgColor": $bgColor, "$width": "max", "$minWidth": $minWidth, "$overflow": "auto", "$borderRadius": "sm", "$padding": { y: '1' }, "$shadow": "lg", "$ringWidth": "1", ref: ref, children: data.map((d) => (jsx(SelectOption, { "$minWidth": $minWidth, "$width": "40", "$padding": { x: '2' }, ...d }, d.name))) }) })] }));
+                        : selectedData?.label || '' }) }), jsx(Transition, { as: Fragment, leave: "transition ease-in duration-100", leaveFrom: "opacity-100", leaveTo: "opacity-0", children: jsx(HeadlessSelect.Options, { "$position": "absolute", "$margin": { top: '1' }, "$maxHeight": "60", "$width": "max", "$minWidth": $minWidth, "$overflow": "auto", "$borderRadius": "sm", "$padding": { y: '1' }, "$shadow": "lg", "$ringWidth": "1", "$zIndex": "20", "$bgColor": "ext-white", ref: ref, children: data.map((d) => (jsx(SelectOption, { "$minWidth": $minWidth, "$width": "40", "$padding": { x: '2' }, ...d }, d.name))) }) })] }));
 });
 
-const Search = forwardRef(({ category, $width, $minWidth, ...props }, ref) => {
+const Search = forwardRef(({ category, $width, $minWidth, defaultValue = {}, onSearch, ...props }, ref) => {
     const theme = useTheme();
     const inputTextStyle = theme.typography['content-600'];
     const iconHeight = predicateHeight(inputTextStyle.$lineHeight);
@@ -3725,13 +3973,74 @@ const Search = forwardRef(({ category, $width, $minWidth, ...props }, ref) => {
         focusWithin$ringOffsetWidth: '2',
         focusWithin$ringColor: 'primary',
     };
-    useState(null);
+    const [searchCriteria, setSearchCriteria] = useState({
+        category: defaultValue.category || category?.[0].name,
+    });
     const categoryNode = useMemo(() => {
         if (!category)
             return jsx(Fragment$1, {});
-        return (jsx(Select, { data: category, by: "name", "$width": $width, "$minWidth": $minWidth, "$bgColor": "white-300" }));
+        return (jsx(Select, { data: category, defaultValue: defaultValue.category, by: "name", "$width": $width, "$minWidth": $minWidth, "$bgColor": "white-300", "$padding": { left: '2' }, onChange: (data) => {
+                setSearchCriteria((criteria) => ({
+                    ...criteria,
+                    category: data.name, //TODO
+                }));
+            } }));
     }, [category]);
-    return (jsxs(Box, { ...props, "$direction": "row", ...style, "aria-role": "listbox", children: [categoryNode, jsxs(Stack, { "$width": "full", children: [jsx(Input$1, { "$width": "full", ...inputTextStyle, "focus$outlineWidth": "none" }), jsx(Stack.Item, { "$bottom": "-1", "$right": "2", children: jsx(Button$1, { children: jsx(Icon, { type: "Search", "$fill": "neutral-300", "$height": iconHeight, "$width": iconHeight }) }) })] })] }));
+    const onSearchHandler = useCallback((evt) => {
+        evt.preventDefault();
+        console.log('====>', searchCriteria, onSearch);
+        onSearch && onSearch(searchCriteria);
+    }, [onSearch, searchCriteria]);
+    const onInputChange = useCallback((e) => {
+        e.preventDefault();
+        setSearchCriteria((search) => ({
+            ...search,
+            criteria: e.target.value,
+        }));
+    }, []);
+    const buttonRef = useRef(null);
+    const handleKeyDown = useEvent((event) => {
+        switch (event.key) {
+            // Ref: https://www.w3.org/TR/wai-aria-practices-1.2/#keyboard-interaction-13
+            case Keys.Enter:
+                // event.preventDefault()
+                event.stopPropagation();
+                if (!event.nativeEvent.isComposing) {
+                    buttonRef.current?.click();
+                }
+                break;
+        }
+    });
+    return (jsxs(Box, { ...props, "$direction": "row", ...style, "aria-role": "listbox", children: [categoryNode, jsxs(Stack, { "$width": "full", children: [jsx(Input$1, { "$width": "full", "$padding": { x: '2', y: '1' }, ...inputTextStyle, "focus$outlineWidth": "none", defaultValue: defaultValue.criteria, onChange: onInputChange, onKeyDown: handleKeyDown }), jsx(Stack.Item, { "$bottom": "-1", "$right": "2", children: jsx(Button$1, { onClick: onSearchHandler, ref: buttonRef, children: jsx(Icon, { type: "Search", "$fill": "neutral-300", "$height": iconHeight, "$width": iconHeight }) }) })] })] }));
 });
 
-export { Article, Aside, Avatar, Badge, Box, Button, CSVFileUploader, Card, CardButton, Checkbox, CheckboxGroup, Column, Details, Div, Figcaption, Figure, FileUploader, Footer, Grid, H1, H2, H3, H4, H5, Header, Heading, Icon, Image, Input, Link, List, Main, Mark, Menu, MenuItem, Nav, Navigation, NumInfo, SVGName, Search, Section, Span, Stack, Summary, Text, ThemeContext, ThemeProvider, Time, attrsClassNameVisitor, isFunction, svgName, twAttrsTree, twBox, twClass, twColumn, twGrid, twGridItem, twPrefix, twStack, twStackItem, twSvg, twTransfer, useTheme, walkThroughAttrsTree };
+const Textarea = forwardRef(({ id, name, defaultValue, label, icon, rows = 5, rules = {}, $a__vertical = false, onChange, ...props }, ref) => {
+    const [savedValue, setSavedValue] = useState();
+    const { classNames, ...restProps } = twClass(props);
+    const dataKey = `${id}_textarea`;
+    const theme = useTheme();
+    const captionStyle = theme.typography[theme.ui.caption];
+    const inputStyle = theme.typography['content-600'];
+    const textAreaLabel = useMemo(() => (jsx(Label, { htmlFor: name, "$width": "max", ...captionStyle, children: label })), [label]);
+    const onChangeHandlerFactory = (handler) => (evt) => {
+        localStorage.setItem(dataKey, evt.target.value);
+        handler && handler(evt);
+    };
+    useEffect(() => {
+        const initialValue = localStorage.getItem(dataKey);
+        setSavedValue(initialValue ?? defaultValue);
+    }, []);
+    const arrangement = useMemo(() => $a__vertical
+        ? {
+            $direction: 'col',
+            $gap: 'y-2',
+        }
+        : {
+            $direction: 'row',
+            $gap: 'x-2',
+        }, []);
+    useState();
+    return (jsxs(Box, { className: classNames, ...arrangement, children: [label && textAreaLabel, jsxs(Stack, { "$width": "full", children: [jsx(TextArea, { id: id, name: name, cols: 32, rows: rows, "$borderRadius": "md", "$borderColor": "neutral-300", ...inputStyle, "$width": "full", defaultValue: savedValue, ...restProps, onChange: onChangeHandlerFactory(onChange), ref: ref }), icon && (jsx(Stack.Item, { "$bottom": "2", "$right": "2", children: jsx(Button$1, { children: jsx(Icon, { type: icon, "$height": "8", "$fill": "primary-400" }) }) }))] })] }));
+});
+
+export { Article, Aside, Avatar, Badge, Box, Button, CSVFileUploader, Card, CardButton, Checkbox, CheckboxGroup, Column, Details, Div, Figcaption, Figure, FileUploadStatus, FileUploader, Footer, Grid, H1, H2, H3, H4, H5, Header, Heading, Icon, Image, Input, LI, LinearProgress, Link, List, Main, Mark, Menu, MenuItem, Nav, Navigation, NumInfo, Panel, SVGName, Search, Section, Select, SelectMode, Span, Stack, StreamProcessor, Summary, Text, Textarea, ThemeContext, ThemeProvider, Time, UL, attrsClassNameVisitor, isFunction, svgName, twAttrsTree, twBox, twClass, twColumn, twGrid, twGridItem, twPrefix, twStack, twStackItem, twSvg, twTransfer, useStream, useTheme, walkThroughAttrsTree };

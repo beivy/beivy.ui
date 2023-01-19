@@ -2,7 +2,6 @@ import { Button, Text } from '@/be.html'
 import { Box } from '@/core'
 import { DevControlStyleProps } from '@/core/be.core-types'
 import { Icon, IconType } from '@/icon'
-import { predicateHeight } from '@/utils/be.tw-helper'
 import { forwardRef } from 'react'
 import { useTheme } from '..'
 export interface CardButtonProps {
@@ -20,7 +19,6 @@ export const CardButton = forwardRef<HTMLButtonElement, CardButtonProps>(
         const theme = useTheme()
         const labelStyle = theme.typography['caption-500']
         const descStyle = theme.typography['caption-300']
-        const iconHeight = predicateHeight(labelStyle.$lineHeight)
 
         return (
             <Button {...style} {...restProps} $padding="2" ref={ref}>
@@ -28,13 +26,15 @@ export const CardButton = forwardRef<HTMLButtonElement, CardButtonProps>(
                     <Box
                         $bgColor="info-400"
                         $borderRadius="full"
-                        $width={iconHeight}
-                        $padding="2"
+                        $width="10"
+                        $height="10"
+                        $padding="1.5"
                     >
                         <Icon
                             type={icon}
                             $fill="neutral-600"
-                            $height={iconHeight}
+                            $height="8"
+                            $width="8"
                         />
                     </Box>
                     <Box $direction="col">

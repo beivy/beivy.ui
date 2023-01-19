@@ -192,6 +192,10 @@ const _List = forwardRefWithAs(
 
         useIsoMorphicEffect(() => {
             if (state.activeItemIndex !== null) {
+                dispatch({
+                    type: ActionTypes.SelectItem,
+                    id: state.items[state.activeItemIndex].id,
+                })
                 restoreFocusIfNecessary(
                     state.items[state.activeItemIndex].dataRef.current?.domRef
                         .current,

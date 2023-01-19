@@ -7,16 +7,16 @@ import {
 } from '../core/be.core-types'
 import { twClass } from '../utils'
 
-export interface ListProps
+export interface ULProps
     extends Omit<React.ComponentPropsWithoutRef<'ul'>, 'className' | 'style'>,
         CommonElementProps,
         Partial<HTMLTextProps>,
         Partial<Screen<HTMLTextProps>>,
         Partial<PseudoState<HTMLTextProps>> {}
 
-export const UL = ({ children, ...props }: TextProps) => {
+export const UL = ({ children, ...props }: ULProps) => {
     const { classNames, ...restProps } = useMemo(
-        () => twClass<TextProps>(props),
+        () => twClass<ULProps>(props),
         [props],
     )
     return (
@@ -26,9 +26,15 @@ export const UL = ({ children, ...props }: TextProps) => {
     )
 }
 
-export const LI = ({ children, ...props }: TextProps) => {
+export interface ListProps
+    extends Omit<React.ComponentPropsWithoutRef<'li'>, 'className' | 'style'>,
+        CommonElementProps,
+        Partial<HTMLTextProps>,
+        Partial<Screen<HTMLTextProps>>,
+        Partial<PseudoState<HTMLTextProps>> {}
+export const LI = ({ children, ...props }: ListProps) => {
     const { classNames, ...restProps } = useMemo(
-        () => twClass<TextProps>(props),
+        () => twClass<ListProps>(props),
         [props],
     )
     return (

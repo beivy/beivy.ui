@@ -1,8 +1,9 @@
-import { Stack } from '@/core'
+import { Box } from '@/core'
 import {
     CommonElementProps,
     DevControlStyleProps,
     ElementPositionProps,
+    InsetProps,
     PseudoState,
     Screen,
     Typography,
@@ -94,11 +95,24 @@ const __ListboxButton = forwardRef<HTMLButtonElement, ListboxButtonProps>(
         const theme = useTheme()
         const captionTypo = theme.typography[theme.ui.caption]
         return (
-            <HLListbox.Button className={classNames} {...restProps} ref={ref}>
+            <HLListbox.Button
+                className={classNames}
+                $display="flex"
+                $width="full"
+                $height="full"
+                {...restProps}
+                ref={ref}
+            >
                 {({ open }) => (
-                    <Stack>
-                        {children}
-                        <Stack.Item $top="-3" $right="0">
+                    <Box
+                        $direction="row"
+                        $justifyContent="between"
+                        $alignItems="center"
+                        $width="full"
+                        $height="full"
+                    >
+                        <Box {...captionTypo}>{children}</Box>
+                        <Box>
                             {open ? (
                                 <Icon
                                     type="ChevronUp"
@@ -116,8 +130,8 @@ const __ListboxButton = forwardRef<HTMLButtonElement, ListboxButtonProps>(
                                     aria-hidden="true"
                                 />
                             )}
-                        </Stack.Item>
-                    </Stack>
+                        </Box>
+                    </Box>
                 )}
             </HLListbox.Button>
         )
@@ -149,6 +163,7 @@ export interface HLListboxOptionsProps
 export interface ListboxOptionsProps
     extends HLListboxOptionsProps,
         CommonElementProps,
+        InsetProps,
         ElementPositionProps {}
 
 const __ListboxOptions = forwardRef<HTMLUListElement, ListboxOptionsProps>(

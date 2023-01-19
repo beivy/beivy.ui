@@ -19,8 +19,8 @@ export const ASearch = () => {
     ]
     return (
         <Box $direction="col" $gap="4">
-            <Search name="1" $width="20" $minWidth="20" category={categories} />
-            <Search name="2" $width="20" $minWidth="20" category={categories} />
+            <Search name="1" $width="24" $minWidth="20" category={categories} />
+            <Search name="2" $width="24" $minWidth="20" category={categories} />
         </Box>
     )
 }

@@ -80,6 +80,10 @@ export const BeTWPrefixes: PrefixTypes = {
         prefix: 'left',
         extra: {},
     },
+    $zIndex: {
+        prefix: 'z',
+        extra: {},
+    },
     $flexBasis: {
         prefix: 'basis',
         extra: {},

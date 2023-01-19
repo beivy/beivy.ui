@@ -92,6 +92,7 @@ export default forwardRef<InputRef, CheckboxProps>((props, forwardedRef) => {
                 $borderRadius="rounded"
                 $borderColor="neutral-300"
                 $textColor="primary"
+                $cursor="pointer"
                 name={name}
                 value={value}
                 {...checkboxProps}
@@ -99,7 +100,11 @@ export default forwardRef<InputRef, CheckboxProps>((props, forwardedRef) => {
             ></Input>
         </Box>,
         <Box key={`${rId}_label`} {...contentsStyle} {...captionTypo}>
-            {label && <Label htmlFor={rId}>{label}</Label>}
+            {label && (
+                <Label htmlFor={rId} $cursor="pointer">
+                    {label}
+                </Label>
+            )}
             {description && <Text {...descriptionTypo}>{description}</Text>}
         </Box>,
     ]

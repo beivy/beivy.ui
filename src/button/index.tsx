@@ -16,6 +16,7 @@ export interface ButtonProps
     outline?: boolean
     leftIcon?: IconType
     rightIcon?: IconType
+    submit?: boolean
 }
 
 export type ButtonRef = HTMLButtonElement
@@ -166,8 +167,10 @@ const Button = forwardRef<ButtonRef, ButtonProps>(
             type = 'primary',
             size = 'medium',
             outline = false,
+            submit = false,
             leftIcon,
             rightIcon,
+
             ...restProps
         },
         ref,
@@ -193,6 +196,7 @@ const Button = forwardRef<ButtonRef, ButtonProps>(
             <HTMLButton
                 {...buttonStyle}
                 {...restProps}
+                type={submit ? 'submit' : 'button'}
                 focus$outlineWidth="none"
                 focus$ringWidth="2"
                 focus$ringOffsetWidth="2"

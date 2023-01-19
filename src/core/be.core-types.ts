@@ -347,6 +347,7 @@ export type GenericGridItemProps<T extends 'column' | 'row' | 'grid'> =
 
 export interface GridItemProps
     extends Partial<GenericGridItemProps<'grid'>>,
+        Partial<Screen<GenericGridItemProps<'grid'>>>,
         Partial<SelfAlignmentProps>,
         Partial<Screen<SelfAlignmentProps>>,
         Partial<PseudoState<SelfAlignmentProps>>,

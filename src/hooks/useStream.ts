@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 export type StreamOption = {
     chunkSize?: number
 }
-class StreamProcessor<T extends any> {
+export class StreamProcessor<T extends any> {
     private data: T[]
     private option: StreamOption
     private __errors: string[]
@@ -46,17 +46,12 @@ class StreamProcessor<T extends any> {
             }
             return
         }
-        console.log('====>chunk', this.data, this.option.chunkSize)
         let chunk = this.data.splice(0, this.option.chunkSize)
-        console.log('====>chunk', chunk, this.data, this.option.chunkSize)
-        this.__idx = this.__idx + chunk.length
         while (chunk.length > 0) {
             const rsts = await Promise.allSettled(
                 this.consumers.map((consumer) =>
                     consumer.func(chunk).catch((err) => {
-                        const msg = `${consumer.name}が${
-                            this.__idx + 1
-                        }件目から${
+                        const msg = `${this.__idx + 1}件目から${
                             this.option.chunkSize
                         }件データの処理中にエラーが起きました。`
                         console.warn(msg, err)
@@ -70,11 +65,11 @@ class StreamProcessor<T extends any> {
                     this.__errors.push((rst as PromiseRejectedResult).reason)
                 }
             })
-            console.log('====>processor', this.remained(), this.errors())
             if (progress) {
                 progress(this.remained(), this.errors())
             }
             chunk = this.data.splice(0, this.option.chunkSize)
+            this.__idx = this.__idx + chunk.length
         }
         this.status = 'settled'
     }
@@ -99,11 +94,11 @@ export function useStream<T extends any>(
         errors: [] as string[],
     })
 
+    console.log('====>stream', data)
     useEffect(() => {
         if (!data) {
             return
         }
-        console.log('====>data', data)
         const name = consumerName ?? consumer.name
         const stream = new StreamProcessor<T>(options)
         stream.addData(data)
@@ -111,7 +106,7 @@ export function useStream<T extends any>(
         stream.process((remained, errors) => {
             setProgress({
                 processed: data.length - remained,
-                errors,
+                errors: [...errors],
             })
         })
     }, [data])

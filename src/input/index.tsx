@@ -1,5 +1,11 @@
-import { forwardRef, useMemo, useState } from 'react'
-import { Input as HTMLInput, Label } from '../be.html'
+import {
+    ComponentPropsWithoutRef,
+    forwardRef,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react'
+import { Input as HTMLInput, Label, Text } from '../be.html'
 import { Box } from '../core'
 import { BoxProps, CommonElementProps } from '../core/be.core-types'
 import { useTheme } from '../hooks/useTheme'
@@ -7,24 +13,40 @@ import { useTheme } from '../hooks/useTheme'
 interface __InputArrangementProps {
     $a__vertical?: boolean
 }
-export interface InputProps extends __InputArrangementProps {
+
+export interface ValidationError {
+    type: string
+    message: string
+}
+export interface InputProps
+    extends __InputArrangementProps,
+        CommonElementProps,
+        ComponentPropsWithoutRef<'input'> {
     name: string
     label: string
     value?: string
     placeholder?: string
+    errors?: ValidationError
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
     (props: InputProps, ref) => {
         const {
+            type = 'text',
             name,
             label,
             placeholder = '',
-            value,
             $a__vertical = false,
+            errors,
+            ...restProps
         } = props
 
-        const [err, setErr] = useState<string | undefined | null>()
+        const [err, setErr] =
+            useState<ValidationError | undefined | null>(errors)
+
+        useEffect(() => {
+            setErr(errors)
+        }, [errors])
 
         const theme = useTheme()
         const captionStyle = theme.typography[theme.ui.caption]
@@ -42,6 +64,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                     : {},
             [err],
         )
+
+        const errMsgStyle: Partial<CommonElementProps> = {
+            ...captionStyle,
+            $textColor: 'error-900',
+        }
 
         const errAriaAttrs = useMemo(
             () =>
@@ -95,16 +122,22 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 <Label htmlFor={name} $width="fit" {...captionStyle}>
                     {label}
                 </Label>
-                <HTMLInput
-                    type="text"
-                    name={name}
-                    id={name}
-                    placeholder={placeholder}
-                    {...inputStyle}
-                    {...errStyle}
-                    {...errAriaAttrs}
-                    ref={ref}
-                />
+                <Box $direction="col" $gap="0.5">
+                    <HTMLInput
+                        type={type}
+                        name={name}
+                        id={name}
+                        placeholder={placeholder}
+                        {...inputStyle}
+                        {...errStyle}
+                        {...errAriaAttrs}
+                        {...restProps}
+                        ref={ref}
+                    />
+                    {err && err.message && (
+                        <Text {...errMsgStyle}>{err.message}</Text>
+                    )}
+                </Box>
             </Box>
         )
     },

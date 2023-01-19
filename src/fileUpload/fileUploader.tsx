@@ -1,6 +1,6 @@
 import { Input, Text } from '@/be.html'
 import { Box } from '@/core'
-import { CommonElementProps } from '@/core/be.core-types'
+import { CommonElementProps, DevControlStyleProps } from '@/core/be.core-types'
 import { BeTSvgFill } from '@/core/be.tailwind-types'
 import { useTheme } from '@/hooks'
 import { Icon } from '@/icon'
@@ -10,7 +10,7 @@ import { useDropzone } from 'react-dropzone'
 
 export interface FileUploadProps
     extends React.ComponentPropsWithoutRef<'input'>,
-        CommonElementProps {
+        DevControlStyleProps {
     onFileAccepted?: (files?: File[] | null) => void
 }
 

@@ -205,6 +205,10 @@ export const twTransfer: {
         name: '$left',
         tcFunc: tc.inset,
     }),
+    $zIndex: twIntervalTransferFactory({
+        name: '$zIndex',
+        tcFunc: tc.zIndex,
+    }),
     $margin: twIntervalTransferFactory({
         name: '$margin',
         tcFunc: tc.margin,
