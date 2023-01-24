@@ -1,6 +1,6 @@
 {
     "name": "@beivy/beivy.ui",
-    "version": "0.0.1-19",
+    "version": "0.0.1-20",
     "license": "MIT",
     "main": "./es/index.js",
     "jsnext:main": "./es/index.js",

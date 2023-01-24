@@ -67,6 +67,7 @@ export const CSVFileUploader = <T extends Record<string, unknown>>({
             const parseResult = csvParse<T>(csvString as string, {
                 header: true,
                 skipEmptyLines: true,
+                dynamicTyping: true,
             })
             if (parseResult.errors.length > 0) {
                 setParseError(parseResult.errors)
@@ -146,7 +147,7 @@ export const CSVFileUploader = <T extends Record<string, unknown>>({
                         size="small"
                         outline
                     >
-                        リトライ
+                        閉じる
                     </Button>
                 </H3>
 

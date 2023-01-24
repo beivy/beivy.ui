@@ -3659,6 +3659,7 @@ const CSVFileUploader = ({ option, consumer, onFileUploadStart, onFileUploadComp
             const parseResult = parse(csvString, {
                 header: true,
                 skipEmptyLines: true,
+                dynamicTyping: true,
             });
             if (parseResult.errors.length > 0) {
                 setParseError(parseResult.errors);
@@ -3715,7 +3716,7 @@ const CSVFileUploader = ({ option, consumer, onFileUploadStart, onFileUploadComp
         }
     }, [status]);
     const errorContents = useMemo(() => {
-        return (jsxs(Fragment$1, { children: [jsxs(H3, { ...theme.ui.error.title, children: ["Oops: \u30D5\u30A1\u30A4\u30EB\uFF08", file?.name || '', "\uFF09\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u4E2D\u306B\u30A8\u30E9\u30FC\u304C\u3042\u308A\u307E\u3057\u305F\u3002", jsx(Button, { type: "secondary", onClick: reset, size: "small", outline: true, children: "\u30EA\u30C8\u30E9\u30A4" })] }), jsxs(UL, { ...theme.ui.error.content, children: [beforeError !== null && (jsxs(LI, { children: ["\u30D5\u30A1\u30A4\u30EB\u30ED\u30FC\u30C9\u306E\u524D\u51E6\u7406\u306B\u30A8\u30E9\u30FC\u304C\u3042\u308A\u307E\u3057\u305F(", beforeError, ")"] }, "before_load_error")), completedError !== null && (jsxs(LI, { children: ["\u30D5\u30A1\u30A4\u30EB\u30ED\u30FC\u30C9\u306E\u5F8C\u51E6\u7406\u306B\u30A8\u30E9\u30FC\u304C\u3042\u308A\u307E\u3057\u305F(", completedError, ")"] }, "completed_load_error")), errors.map((err, idx) => {
+        return (jsxs(Fragment$1, { children: [jsxs(H3, { ...theme.ui.error.title, children: ["Oops: \u30D5\u30A1\u30A4\u30EB\uFF08", file?.name || '', "\uFF09\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u4E2D\u306B\u30A8\u30E9\u30FC\u304C\u3042\u308A\u307E\u3057\u305F\u3002", jsx(Button, { type: "secondary", onClick: reset, size: "small", outline: true, children: "\u9589\u3058\u308B" })] }), jsxs(UL, { ...theme.ui.error.content, children: [beforeError !== null && (jsxs(LI, { children: ["\u30D5\u30A1\u30A4\u30EB\u30ED\u30FC\u30C9\u306E\u524D\u51E6\u7406\u306B\u30A8\u30E9\u30FC\u304C\u3042\u308A\u307E\u3057\u305F(", beforeError, ")"] }, "before_load_error")), completedError !== null && (jsxs(LI, { children: ["\u30D5\u30A1\u30A4\u30EB\u30ED\u30FC\u30C9\u306E\u5F8C\u51E6\u7406\u306B\u30A8\u30E9\u30FC\u304C\u3042\u308A\u307E\u3057\u305F(", completedError, ")"] }, "completed_load_error")), errors.map((err, idx) => {
                             return jsx(LI, { children: err }, `err_${idx}`);
                         })] })] }));
     }, [errors, beforeError, completedError]);
