@@ -2826,13 +2826,26 @@ const _List = forwardRefWithAs((props, ref) => {
     useIsoMorphicEffect(() => {
         if (state.activeItemIndex !== null) {
             dispatch({
-                type: ActionTypes.SelectItem,
+                type: ActionTypes.GoToItem,
+                focus: Focus$1.Specific,
                 id: state.items[state.activeItemIndex].id,
             });
             restoreFocusIfNecessary(state.items[state.activeItemIndex].dataRef.current?.domRef
                 .current);
         }
     }, [state.activeItemIndex]);
+    useIsoMorphicEffect(() => {
+        if (state.selectedItemIndex !== null) {
+            if (state.items[state.selectedItemIndex]) {
+                dispatch({
+                    type: ActionTypes.SelectItem,
+                    id: state.items[state.selectedItemIndex].id,
+                });
+                restoreFocusIfNecessary(state.items[state.selectedItemIndex].dataRef.current
+                    ?.domRef.current);
+            }
+        }
+    }, [state.selectedItemIndex]);
     const handleKeyDown = useEvent((event) => {
         switch (event.key) {
             // Ref: https://www.w3.org/TR/wai-aria-practices-1.2/#keyboard-interaction-13
@@ -2841,12 +2854,12 @@ const _List = forwardRefWithAs((props, ref) => {
                 // event.preventDefault()
                 event.stopPropagation();
                 if (state.activeItemIndex !== null) {
-                    let { dataRef } = state.items[state.activeItemIndex];
-                    dataRef.current?.domRef.current?.click();
                     dispatch({
                         type: ActionTypes.SelectItem,
                         id: state.items[state.activeItemIndex].id,
                     });
+                    let { dataRef } = state.items[state.activeItemIndex];
+                    dataRef.current?.domRef.current?.click();
                 }
                 break;
             case Keys.Escape:
@@ -3146,12 +3159,6 @@ const SVGName = Object.keys(SVG);
 const svgName = Object.keys(SVG);
 const SVGIcons = mergeAll(SVGName.map((svg) => ({ [`${svg}`]: SVG[svg] })));
 const Icon = ({ type, ...rest }) => {
-    if (!rest['$width']) {
-        rest['$width'] = '4';
-    }
-    if (!rest['$height']) {
-        rest['$height'] = '4';
-    }
     const { classNames, ...restProps } = twSvg(rest);
     const SvgIcon = SVGIcons[type];
     return SvgIcon ? jsx(SvgIcon, { className: classNames, ...restProps }) : jsx(Fragment$1, {});
@@ -3890,7 +3897,11 @@ const Navigation = forwardRef(({ items, activeItemIndex }, ref) => {
     return (jsx(List, { selectedItemIndex: activeItemIndex, children: jsx(Box, { "$direction": "row", children: itemContents }) }));
 });
 
-const NumInfo = forwardRef(({ num, precision = 2, description = '', actions, ...props }, ref) => {
+const Spinner = () => {
+    return (jsx("div", { className: "flex justify-center", children: jsx("div", { className: "animate-spin h-4 w-4 border-2 border-primary-500 rounded-full border-t-transparent" }) }));
+};
+
+const NumInfo = forwardRef(({ num, precision = 2, description = '', actions, loading = false, ...props }, ref) => {
     const theme = useTheme();
     const numStyle = theme.typography['caption-900'];
     const descriptionStyle = theme.typography['caption-300'];
@@ -3899,7 +3910,7 @@ const NumInfo = forwardRef(({ num, precision = 2, description = '', actions, ...
         const max = 10 ** precision - 1;
         return num > max ? max.toString() + '+' : num.toString();
     };
-    return (jsxs(Section, { className: classNames, "$gap": "4", "$padding": "4", "$alignItems": "start", "$justifyContent": "center", "$maxWidth": "xs", "$width": "fit", "$borderRadius": "md", ...style, ...restProps, ref: ref, children: [jsx(Text, { ...numStyle, children: precisedNum(num, precision) }), jsxs(Box, { "$direction": "col", "$gap": "2", "$alignItems": "end", children: [jsx(H3, { ...descriptionStyle, children: description }), actions] })] }));
+    return (jsxs(Section, { className: classNames, "$gap": "4", "$padding": "4", "$alignItems": "start", "$justifyContent": "center", "$maxWidth": "xs", "$width": "fit", "$borderRadius": "md", ...style, ...restProps, ref: ref, children: [loading ? (jsx(Spinner, {})) : (jsx(Text, { ...numStyle, children: precisedNum(num, precision) })), jsxs(Box, { "$direction": "col", "$gap": "2", "$alignItems": "end", children: [jsx(H3, { ...descriptionStyle, children: description }), actions] })] }));
 });
 
 const Panel = ({ show, children, ...props }) => {
@@ -4014,10 +4025,10 @@ const Search = forwardRef(({ category, $width, $minWidth, defaultValue = {}, onS
     return (jsxs(Box, { ...props, "$direction": "row", ...style, "aria-role": "listbox", children: [categoryNode, jsxs(Stack, { "$width": "full", children: [jsx(Input$1, { "$width": "full", "$padding": { x: '2', y: '1' }, ...inputTextStyle, "focus$outlineWidth": "none", defaultValue: defaultValue.criteria, onChange: onInputChange, onKeyDown: handleKeyDown }), jsx(Stack.Item, { "$bottom": "-1", "$right": "2", children: jsx(Button$1, { onClick: onSearchHandler, ref: buttonRef, children: jsx(Icon, { type: "Search", "$fill": "neutral-300", "$height": iconHeight, "$width": iconHeight }) }) })] })] }));
 });
 
-const Textarea = forwardRef(({ id, name, defaultValue, label, icon, rows = 5, rules = {}, $a__vertical = false, onChange, ...props }, ref) => {
+const Textarea = forwardRef(({ id, name, defaultValue, label, icon, rows = 5, rules = {}, $a__vertical = false, disabled, onChange, onSend, ...props }, ref) => {
     const [savedValue, setSavedValue] = useState();
     const { classNames, ...restProps } = twClass(props);
-    const dataKey = `${id}_textarea`;
+    const dataKey = `${id}_${name}_textarea`;
     const theme = useTheme();
     const captionStyle = theme.typography[theme.ui.caption];
     const inputStyle = theme.typography['content-600'];
@@ -4029,7 +4040,7 @@ const Textarea = forwardRef(({ id, name, defaultValue, label, icon, rows = 5, ru
     useEffect(() => {
         const initialValue = localStorage.getItem(dataKey);
         setSavedValue(initialValue ?? defaultValue);
-    }, []);
+    }, [defaultValue]);
     const arrangement = useMemo(() => $a__vertical
         ? {
             $direction: 'col',
@@ -4040,7 +4051,24 @@ const Textarea = forwardRef(({ id, name, defaultValue, label, icon, rows = 5, ru
             $gap: 'x-2',
         }, []);
     useState();
-    return (jsxs(Box, { className: classNames, ...arrangement, children: [label && textAreaLabel, jsxs(Stack, { "$width": "full", children: [jsx(TextArea, { id: id, name: name, cols: 32, rows: rows, "$borderRadius": "md", "$borderColor": "neutral-300", ...inputStyle, "$width": "full", defaultValue: savedValue, ...restProps, onChange: onChangeHandlerFactory(onChange), ref: ref }), icon && (jsx(Stack.Item, { "$bottom": "2", "$right": "2", children: jsx(Button$1, { children: jsx(Icon, { type: icon, "$height": "8", "$fill": "primary-400" }) }) }))] })] }));
+    const internalRef = useRef(null);
+    const textareaRef = useSyncRefs(ref, internalRef);
+    const onClickHandler = useCallback(() => {
+        onSend && onSend(internalRef.current?.value);
+        localStorage.removeItem(dataKey);
+    }, [onSend]);
+    // If the value is read from local storage, set disabled = false
+    const isDisabled = savedValue !== defaultValue ? false : disabled;
+    const iconFill = () => {
+        return isDisabled
+            ? {
+                $fill: 'neutral-400',
+            }
+            : {
+                $fill: 'primary-400',
+            };
+    };
+    return (jsxs(Box, { className: classNames, ...arrangement, children: [label && textAreaLabel, jsxs(Stack, { "$width": "full", children: [jsx(TextArea, { id: id, name: name, cols: 32, rows: rows, "$borderRadius": "md", "$borderColor": "neutral-300", ...inputStyle, "$width": "full", defaultValue: savedValue, ...restProps, onChange: onChangeHandlerFactory(onChange), ref: textareaRef }), icon && (jsx(Stack.Item, { "$bottom": "2", "$right": "2", children: jsx(Button$1, { onClick: onClickHandler, disabled: isDisabled, children: jsx(Icon, { type: icon, "$height": "8", ...iconFill() }) }) }))] })] }));
 });
 
 export { Article, Aside, Avatar, Badge, Box, Button, CSVFileUploader, Card, CardButton, Checkbox, CheckboxGroup, Column, Details, Div, Figcaption, Figure, FileUploadStatus, FileUploader, Footer, Grid, H1, H2, H3, H4, H5, Header, Heading, Icon, Image, Input, LI, LinearProgress, Link, List, Main, Mark, Menu, MenuItem, Nav, Navigation, NumInfo, Panel, SVGName, Search, Section, Select, SelectMode, Span, Stack, StreamProcessor, Summary, Text, Textarea, ThemeContext, ThemeProvider, Time, UL, attrsClassNameVisitor, isFunction, svgName, twAttrsTree, twBox, twClass, twColumn, twGrid, twGridItem, twPrefix, twStack, twStackItem, twSvg, twTransfer, useStream, useTheme, walkThroughAttrsTree };

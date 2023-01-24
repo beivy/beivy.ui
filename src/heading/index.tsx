@@ -1,10 +1,10 @@
 import { H1, H2, H3, H4, H5 } from '@/be.html'
 import { Box } from '@/core'
 import { useTheme } from '@/hooks'
-import { createElement } from 'react'
+import React, { createElement } from 'react'
 
 export interface SectionProps {
-    title: string
+    title: string | React.ReactNode
     as?: 'H1' | 'H2' | 'H3' | 'H4' | 'H5'
     children?: React.ReactNode
 }

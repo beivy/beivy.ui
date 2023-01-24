@@ -21,12 +21,6 @@ const SVGIcons: Record<IconType, React.FC<SVGProps<SVGSVGElement>>> = mergeAll(
 ) as Record<IconType, React.FC<SVGProps<SVGSVGElement>>>
 
 const Icon: FC<IconProps> = ({ type, ...rest }: IconProps) => {
-    if (!rest['$width']) {
-        rest['$width'] = '4'
-    }
-    if (!rest['$height']) {
-        rest['$height'] = '4'
-    }
     const { classNames, ...restProps } = twSvg(rest)
     const SvgIcon = SVGIcons[type]
 

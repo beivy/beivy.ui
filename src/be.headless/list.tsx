@@ -193,7 +193,8 @@ const _List = forwardRefWithAs(
         useIsoMorphicEffect(() => {
             if (state.activeItemIndex !== null) {
                 dispatch({
-                    type: ActionTypes.SelectItem,
+                    type: ActionTypes.GoToItem,
+                    focus: Focus.Specific,
                     id: state.items[state.activeItemIndex].id,
                 })
                 restoreFocusIfNecessary(
@@ -202,6 +203,21 @@ const _List = forwardRefWithAs(
                 )
             }
         }, [state.activeItemIndex])
+
+        useIsoMorphicEffect(() => {
+            if (state.selectedItemIndex !== null) {
+                if (state.items[state.selectedItemIndex]) {
+                    dispatch({
+                        type: ActionTypes.SelectItem,
+                        id: state.items[state.selectedItemIndex].id,
+                    })
+                    restoreFocusIfNecessary(
+                        state.items[state.selectedItemIndex].dataRef.current
+                            ?.domRef.current,
+                    )
+                }
+            }
+        }, [state.selectedItemIndex])
 
         const handleKeyDown = useEvent(
             (event: KeyboardEvent<HTMLButtonElement>) => {
@@ -213,12 +229,12 @@ const _List = forwardRefWithAs(
                         // event.preventDefault()
                         event.stopPropagation()
                         if (state.activeItemIndex !== null) {
-                            let { dataRef } = state.items[state.activeItemIndex]
-                            dataRef.current?.domRef.current?.click()
                             dispatch({
                                 type: ActionTypes.SelectItem,
                                 id: state.items[state.activeItemIndex].id,
                             })
+                            let { dataRef } = state.items[state.activeItemIndex]
+                            dataRef.current?.domRef.current?.click()
                         }
                         break
                     case Keys.Escape:
