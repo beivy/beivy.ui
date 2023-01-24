@@ -1,4 +1,4 @@
-import { Image, Span } from '../be.html'
+import { Image } from '../be.html'
 import { Box } from '../core'
 import { BeTHeight, BeTWidth } from '../core/be.tailwind-types'
 
@@ -35,9 +35,8 @@ export const Avatar = ({ alt, src, $width, $height }: AvatarProps) => {
             $textColor="neutral-100"
             $justifyContent="center"
             $alignItems="center"
-            $alignContent="center"
         >
-            <Span $display="block">{alt?.charAt(0)}</Span>
+            <p>{alt?.charAt(0).toUpperCase()}</p>
         </Box>
     )
 }

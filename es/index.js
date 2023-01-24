@@ -1864,7 +1864,7 @@ const Avatar = ({ alt, src, $width, $height }) => {
     if (src) {
         return (jsx(Image, { "$display": "inline-block", src: src, alt: alt, "$width": width, "$height": height, "$borderRadius": "full" }));
     }
-    return (jsx(Box, { "$display": "inline-flex", "$bgColor": "primary", "$width": width, "$height": height, "$borderRadius": "full", "$textColor": "neutral-100", "$justifyContent": "center", "$alignItems": "center", "$alignContent": "center", children: jsx(Span, { "$display": "block", children: alt?.charAt(0) }) }));
+    return (jsx(Box, { "$display": "inline-flex", "$bgColor": "primary", "$width": width, "$height": height, "$borderRadius": "full", "$textColor": "neutral-100", "$justifyContent": "center", "$alignItems": "center", children: jsx("p", { children: alt?.charAt(0).toUpperCase() }) }));
 };
 
 class StreamProcessor {
@@ -4071,4 +4071,4 @@ const Textarea = forwardRef(({ id, name, defaultValue, label, icon, rows = 5, ru
     return (jsxs(Box, { className: classNames, ...arrangement, children: [label && textAreaLabel, jsxs(Stack, { "$width": "full", children: [jsx(TextArea, { id: id, name: name, cols: 32, rows: rows, "$borderRadius": "md", "$borderColor": "neutral-300", ...inputStyle, "$width": "full", defaultValue: savedValue, ...restProps, onChange: onChangeHandlerFactory(onChange), ref: textareaRef }), icon && (jsx(Stack.Item, { "$bottom": "2", "$right": "2", children: jsx(Button$1, { onClick: onClickHandler, disabled: isDisabled, children: jsx(Icon, { type: icon, "$height": "8", ...iconFill() }) }) }))] })] }));
 });
 
-export { Article, Aside, Avatar, Badge, Box, Button, CSVFileUploader, Card, CardButton, Checkbox, CheckboxGroup, Column, Details, Div, Figcaption, Figure, FileUploadStatus, FileUploader, Footer, Grid, H1, H2, H3, H4, H5, Header, Heading, Icon, Image, Input, LI, LinearProgress, Link, List, Main, Mark, Menu, MenuItem, Nav, Navigation, NumInfo, Panel, SVGName, Search, Section, Select, SelectMode, Span, Stack, StreamProcessor, Summary, Text, Textarea, ThemeContext, ThemeProvider, Time, UL, attrsClassNameVisitor, isFunction, svgName, twAttrsTree, twBox, twClass, twColumn, twGrid, twGridItem, twPrefix, twStack, twStackItem, twSvg, twTransfer, useStream, useTheme, walkThroughAttrsTree };
+export { Article, Aside, Avatar, Badge, Box, Button, CSVFileUploader, Card, CardButton, Checkbox, CheckboxGroup, Column, Details, Div, Figcaption, Figure, FileUploadStatus, FileUploader, Footer, Grid, H1, H2, H3, H4, H5, Header, Heading, Icon, Image, Input, LI, LinearProgress, Link, List, Main, Mark, Menu, MenuItem, Nav, Navigation, NumInfo, Panel, SVGName, Search, Section, Select, SelectMode, Span, Stack, StreamProcessor, Summary, Text, Textarea, Theme, ThemeContext, ThemeProvider, Time, UL, attrsClassNameVisitor, isFunction, svgName, twAttrsTree, twBox, twClass, twColumn, twGrid, twGridItem, twPrefix, twStack, twStackItem, twSvg, twTransfer, useStream, useTheme, walkThroughAttrsTree };

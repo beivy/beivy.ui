@@ -1,6 +1,6 @@
 import React, { createContext } from 'react'
 
-const Theme = {
+export const Theme = {
     typography: {
         ['title-100']: {
             $fontSize: 'xs',
