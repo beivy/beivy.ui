@@ -3862,10 +3862,17 @@ const Navigation = forwardRef(({ items, activeItemIndex }, ref) => {
     //     return () => setCurrentActiveItemIndex(idx)
     // }
     const inRouterContext = useInRouterContext();
+    const LinkElement = useMemo(() => {
+        if (inRouterContext) {
+            return ({ children, href, ...props }) => (jsx(Link$1, { to: href, ...props, children: children }));
+        }
+        return ({ children, href, ...props }) => (jsx(Link, { href: href, ...props, children: children }));
+    }, [inRouterContext]);
     const itemContents = useMemo(() => items.map((item, idx) => {
         const visibility = (active) => active
             ? {
-                $display: 'inline',
+                $display: 'hidden',
+                sm$display: 'inline',
             }
             : {
                 $display: 'hidden',
@@ -3873,9 +3880,7 @@ const Navigation = forwardRef(({ items, activeItemIndex }, ref) => {
             };
         const activeStyle = (active) => active
             ? {
-                $borderWidth: 'b-2',
                 $borderColor: 'primary-500',
-                $bgColor: 'primary-200',
                 $textColor: 'neutral-600',
             }
             : { $textColor: 'neutral-500' };
@@ -3884,16 +3889,19 @@ const Navigation = forwardRef(({ items, activeItemIndex }, ref) => {
                 $fill: 'neutral-600',
             }
             : { $fill: 'neutral-400' };
-        const LinkElement = useMemo(() => {
-            if (inRouterContext) {
-                return ({ children, href, ...props }) => (jsx(Link$1, { to: href, ...props, children: children }));
+        const selectedStyle = (selected) => selected
+            ? {
+                $bgColor: 'primary-200',
+                $borderWidth: 'b-2',
+                $borderRadius: { top: 'md' },
+                $borderColor: 'primary-500',
+                $textColor: 'neutral-600',
             }
-            return ({ children, href, ...props }) => (jsx(Link, { href: href, ...props, children: children }));
-        }, [inRouterContext]);
+            : {};
         return (jsx(List.Item, { children: ({ active, selected }) => (jsx(LinkElement, { href: item.href, tabIndex: 0, children: jsxs(Box, { "$alignItems": "center", "$cursor": "pointer", "$borderRadius": {
                         top: 'md',
                         bottom: 'none',
-                    }, "focus$ringWidth": "2", "focus$ringOffsetWidth": "2", "focus$ringColor": "primary", "focusVisible$outlineWidth": "1", "focusVisible$outlineColor": "primary-200", "focus$outlineWidth": "0", ...activeStyle(active || selected), "$direction": "row", "$padding": { x: '3', y: '2' }, children: [item.iconType && (jsx(Icon, { type: item.iconType, "$height": iconHeight, ...iconStyle(active || selected) })), jsx(Text, { ...visibility(active), children: item.label })] }) })) }, `${item.name}`));
+                    }, "focus$ringWidth": "2", "focus$ringOffsetWidth": "2", "focus$ringColor": "primary", "focusVisible$outlineWidth": "1", "focusVisible$outlineColor": "primary-200", "focus$outlineWidth": "0", ...activeStyle(active), ...selectedStyle(selected), "$direction": "row", "$padding": { x: '3', y: '2' }, children: [item.iconType && (jsx(Icon, { type: item.iconType, "$height": iconHeight, ...iconStyle(active || selected) })), jsx(Text, { ...visibility(active), children: item.label })] }) })) }, `${item.name}`));
     }), [items]);
     return (jsx(List, { selectedItemIndex: activeItemIndex, children: jsx(Box, { "$direction": "row", children: itemContents }) }));
 });

@@ -33,6 +33,20 @@ export const Navigation = forwardRef(
         //     return () => setCurrentActiveItemIndex(idx)
         // }
         const inRouterContext = useInRouterContext()
+        const LinkElement = useMemo(() => {
+            if (inRouterContext) {
+                return ({ children, href, ...props }: any) => (
+                    <RouterLink to={href} {...props}>
+                        {children}
+                    </RouterLink>
+                )
+            }
+            return ({ children, href, ...props }: any) => (
+                <Link href={href} {...props}>
+                    {children}
+                </Link>
+            )
+        }, [inRouterContext])
 
         const itemContents = useMemo(
             () =>
@@ -42,7 +56,8 @@ export const Navigation = forwardRef(
                     ): Partial<CommonElementProps> =>
                         active
                             ? {
-                                  $display: 'inline',
+                                  $display: 'hidden',
+                                  sm$display: 'inline',
                               }
                             : {
                                   $display: 'hidden',
@@ -53,9 +68,7 @@ export const Navigation = forwardRef(
                     ): Partial<CommonElementProps> =>
                         active
                             ? {
-                                  $borderWidth: 'b-2',
                                   $borderColor: 'primary-500',
-                                  $bgColor: 'primary-200',
                                   $textColor: 'neutral-600',
                               }
                             : { $textColor: 'neutral-500' }
@@ -66,20 +79,19 @@ export const Navigation = forwardRef(
                               }
                             : { $fill: 'neutral-400' }
 
-                    const LinkElement = useMemo(() => {
-                        if (inRouterContext) {
-                            return ({ children, href, ...props }: any) => (
-                                <RouterLink to={href} {...props}>
-                                    {children}
-                                </RouterLink>
-                            )
-                        }
-                        return ({ children, href, ...props }: any) => (
-                            <Link href={href} {...props}>
-                                {children}
-                            </Link>
-                        )
-                    }, [inRouterContext])
+                    const selectedStyle = (
+                        selected: boolean,
+                    ): Partial<CommonElementProps> =>
+                        selected
+                            ? {
+                                  $bgColor: 'primary-200',
+                                  $borderWidth: 'b-2',
+                                  $borderRadius: { top: 'md' },
+                                  $borderColor: 'primary-500',
+                                  $textColor: 'neutral-600',
+                              }
+                            : {}
+
                     return (
                         <List.Item key={`${item.name}`}>
                             {({ active, selected }) => (
@@ -98,7 +110,8 @@ export const Navigation = forwardRef(
                                         focusVisible$outlineWidth="1"
                                         focusVisible$outlineColor="primary-200"
                                         focus$outlineWidth="0"
-                                        {...activeStyle(active || selected)}
+                                        {...activeStyle(active)}
+                                        {...selectedStyle(selected)}
                                         $direction="row"
                                         $padding={{ x: '3', y: '2' }}
                                     >
