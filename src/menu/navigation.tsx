@@ -122,6 +122,7 @@ export const Navigation = forwardRef(
                                                 {...iconStyle(
                                                     active || selected,
                                                 )}
+                                                aria-label={`${item.label}`}
                                             />
                                         )}
                                         <Text {...visibility(active)}>

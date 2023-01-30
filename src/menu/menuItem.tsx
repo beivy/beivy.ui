@@ -46,6 +46,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
                             $height={lineHeight}
                             $padding="1"
                             {...iconStyle(active, theme)}
+                            aria-label={label}
                         />
                     )}
                     {label && <Text>{label}</Text>}

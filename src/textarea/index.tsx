@@ -138,7 +138,12 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                                 onClick={onClickHandler}
                                 disabled={isDisabled}
                             >
-                                <Icon type={icon} $height="8" {...iconFill()} />
+                                <Icon
+                                    type={icon}
+                                    $height="8"
+                                    {...iconFill()}
+                                    aria-label="送信"
+                                />
                             </Button>
                         </Stack.Item>
                     )}

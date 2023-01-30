@@ -3341,7 +3341,7 @@ const CardButton = forwardRef(({ icon, label, description, style, ...restProps }
     const theme = useTheme();
     const labelStyle = theme.typography['caption-500'];
     const descStyle = theme.typography['caption-300'];
-    return (jsx(Button$1, { ...style, ...restProps, "$padding": "2", ref: ref, children: jsxs(Box, { "$direction": "row", "$gap": "6", "$alignItems": "center", children: [jsx(Box, { "$bgColor": "info-400", "$borderRadius": "full", "$width": "10", "$height": "10", "$padding": "1.5", children: jsx(Icon, { type: icon, "$fill": "neutral-600", "$height": "8", "$width": "8" }) }), jsxs(Box, { "$direction": "col", children: [jsx(Text, { ...descStyle, children: description }), jsx(Text, { ...labelStyle, children: label })] })] }) }));
+    return (jsx(Button$1, { ...style, ...restProps, "$padding": "2", ref: ref, children: jsxs(Box, { "$direction": "row", "$gap": "6", "$alignItems": "center", children: [jsx(Box, { "$bgColor": "info-400", "$borderRadius": "full", "$width": "10", "$height": "10", "$padding": "1.5", children: jsx(Icon, { type: icon, "$fill": "neutral-600", "$height": "8", "$width": "8", "aria-label": `${description}${label}` }) }), jsxs(Box, { "$direction": "col", children: [jsx(Text, { ...descStyle, children: description }), jsx(Text, { ...labelStyle, children: label })] })] }) }));
 });
 
 const beStyleAttrTree = (props) => {
@@ -3829,7 +3829,7 @@ const MenuItem = ({ label, iconType, type = 'Button', }) => {
         return active ? uiTheme.ui.icon.active : uiTheme.ui.icon.inactive;
     };
     const itemContent = useCallback((active, theme, type) => {
-        return (jsxs(Box, { "$direction": "row", "$alignItems": "center", "$padding": "2", ...captionStyle, ...menuStyle(active, theme), children: [iconType && (jsx(Icon, { type: iconType, "$width": lineHeight, "$height": lineHeight, "$padding": "1", ...iconStyle(active, theme) })), label && jsx(Text, { children: label })] }));
+        return (jsxs(Box, { "$direction": "row", "$alignItems": "center", "$padding": "2", ...captionStyle, ...menuStyle(active, theme), children: [iconType && (jsx(Icon, { type: iconType, "$width": lineHeight, "$height": lineHeight, "$padding": "1", ...iconStyle(active, theme), "aria-label": label })), label && jsx(Text, { children: label })] }));
     }, [iconType, lineHeight, captionStyle]);
     return (jsx(Menu$1.Item, { children: ({ active }) => {
             if (type === 'Button') {
@@ -3901,7 +3901,7 @@ const Navigation = forwardRef(({ items, activeItemIndex }, ref) => {
         return (jsx(List.Item, { children: ({ active, selected }) => (jsx(LinkElement, { href: item.href, tabIndex: 0, children: jsxs(Box, { "$alignItems": "center", "$cursor": "pointer", "$borderRadius": {
                         top: 'md',
                         bottom: 'none',
-                    }, "focus$ringWidth": "2", "focus$ringOffsetWidth": "2", "focus$ringColor": "primary", "focusVisible$outlineWidth": "1", "focusVisible$outlineColor": "primary-200", "focus$outlineWidth": "0", ...activeStyle(active), ...selectedStyle(selected), "$direction": "row", "$padding": { x: '3', y: '2' }, children: [item.iconType && (jsx(Icon, { type: item.iconType, "$height": iconHeight, ...iconStyle(active || selected) })), jsx(Text, { ...visibility(active), children: item.label })] }) })) }, `${item.name}`));
+                    }, "focus$ringWidth": "2", "focus$ringOffsetWidth": "2", "focus$ringColor": "primary", "focusVisible$outlineWidth": "1", "focusVisible$outlineColor": "primary-200", "focus$outlineWidth": "0", ...activeStyle(active), ...selectedStyle(selected), "$direction": "row", "$padding": { x: '3', y: '2' }, children: [item.iconType && (jsx(Icon, { type: item.iconType, "$height": iconHeight, ...iconStyle(active || selected), "aria-label": `${item.label}` })), jsx(Text, { ...visibility(active), children: item.label })] }) })) }, `${item.name}`));
     }), [items]);
     return (jsx(List, { selectedItemIndex: activeItemIndex, children: jsx(Box, { "$direction": "row", children: itemContents }) }));
 });
@@ -4031,7 +4031,7 @@ const Search = forwardRef(({ category, $width, $minWidth, defaultValue = {}, onS
                 break;
         }
     });
-    return (jsxs(Box, { ...props, "$direction": "row", ...style, "aria-role": "listbox", children: [categoryNode, jsxs(Stack, { "$width": "full", children: [jsx(Input$1, { "$width": "full", "$padding": { x: '2', y: '1' }, ...inputTextStyle, "focus$outlineWidth": "none", defaultValue: defaultValue.criteria, onChange: onInputChange, onKeyDown: handleKeyDown }), jsx(Stack.Item, { "$bottom": "-1", "$right": "2", children: jsx(Button$1, { onClick: onSearchHandler, ref: buttonRef, children: jsx(Icon, { type: "Search", "$fill": "neutral-300", "$height": iconHeight, "$width": iconHeight }) }) })] })] }));
+    return (jsxs(Box, { ...props, "$direction": "row", ...style, "aria-role": "listbox", children: [categoryNode, jsxs(Stack, { "$width": "full", children: [jsx(Input$1, { "$width": "full", "$padding": { x: '2', y: '1' }, ...inputTextStyle, "focus$outlineWidth": "none", defaultValue: defaultValue.criteria, onChange: onInputChange, onKeyDown: handleKeyDown }), jsx(Stack.Item, { "$bottom": "-1", "$right": "2", children: jsx(Button$1, { onClick: onSearchHandler, ref: buttonRef, children: jsx(Icon, { type: "Search", "$fill": "neutral-300", "$height": iconHeight, "$width": iconHeight, "aria-label": "\u691C\u7D22" }) }) })] })] }));
 });
 
 const Textarea = forwardRef(({ id, name, defaultValue, label, icon, rows = 5, rules = {}, $a__vertical = false, disabled, onChange, onSend, ...props }, ref) => {
@@ -4077,7 +4077,7 @@ const Textarea = forwardRef(({ id, name, defaultValue, label, icon, rows = 5, ru
                 $fill: 'primary-400',
             };
     };
-    return (jsxs(Box, { className: classNames, ...arrangement, children: [label && textAreaLabel, jsxs(Stack, { "$width": "full", children: [jsx(TextArea, { id: id, name: name, cols: 32, rows: rows, "$borderRadius": "md", "$borderColor": "neutral-300", ...inputStyle, "$width": "full", defaultValue: savedValue, ...restProps, onChange: onChangeHandlerFactory(onChange), ref: textareaRef }), icon && (jsx(Stack.Item, { "$bottom": "2", "$right": "2", children: jsx(Button$1, { onClick: onClickHandler, disabled: isDisabled, children: jsx(Icon, { type: icon, "$height": "8", ...iconFill() }) }) }))] })] }));
+    return (jsxs(Box, { className: classNames, ...arrangement, children: [label && textAreaLabel, jsxs(Stack, { "$width": "full", children: [jsx(TextArea, { id: id, name: name, cols: 32, rows: rows, "$borderRadius": "md", "$borderColor": "neutral-300", ...inputStyle, "$width": "full", defaultValue: savedValue, ...restProps, onChange: onChangeHandlerFactory(onChange), ref: textareaRef }), icon && (jsx(Stack.Item, { "$bottom": "2", "$right": "2", children: jsx(Button$1, { onClick: onClickHandler, disabled: isDisabled, children: jsx(Icon, { type: icon, "$height": "8", ...iconFill(), "aria-label": "\u9001\u4FE1" }) }) }))] })] }));
 });
 
 export { Article, Aside, Avatar, Badge, Box, Button, CSVFileUploader, Card, CardButton, Checkbox, CheckboxGroup, Column, Details, Div, Figcaption, Figure, FileUploadStatus, FileUploader, Footer, Grid, H1, H2, H3, H4, H5, Header, Heading, Icon, Image, Input, LI, LinearProgress, Link, List, Main, Mark, Menu, MenuItem, Nav, Navigation, NumInfo, Panel, SVGName, Search, Section, Select, SelectMode, Span, Stack, StreamProcessor, Summary, Text, Textarea, Theme, ThemeContext, ThemeProvider, Time, UL, attrsClassNameVisitor, isFunction, svgName, twAttrsTree, twBox, twClass, twColumn, twGrid, twGridItem, twPrefix, twStack, twStackItem, twSvg, twTransfer, useStream, useTheme, walkThroughAttrsTree };

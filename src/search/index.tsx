@@ -131,6 +131,7 @@ export const Search = forwardRef<HTMLInputElement, SearchProps>(
                                 $fill="neutral-300"
                                 $height={iconHeight}
                                 $width={iconHeight}
+                                aria-label="検索"
                             />
                         </Button>
                     </Stack.Item>
