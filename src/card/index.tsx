@@ -2,7 +2,7 @@ import { Box, Footer, Header, Section } from '@/core'
 import { useTheme } from '@/hooks'
 import { twClass } from '@/utils'
 import { forwardRef, useMemo } from 'react'
-import { H2, Text } from '../be.html'
+import { H2, Link, Text } from '../be.html'
 import {
     BorderProps,
     CommonElementProps,
@@ -72,6 +72,35 @@ const Card = forwardRef<HTMLElement, CardProps>(
             return style(data)
         }, [style])
 
+        const descriptionContent = (txt?: string) => {
+            if (!txt) return <></>
+            const regex = /\[(.*?)\]\((.*?)\)/g
+            // const match = regex.exec(txt)
+
+            const nodes: React.ReactNode[] = []
+            let lastIndex = 0
+            txt.replace(regex, (match: string, linkText, url, index) => {
+                if (lastIndex < index) {
+                    nodes.push(txt.slice(lastIndex, index))
+                }
+                nodes.push(
+                    <Link
+                        target="_blank"
+                        href={url}
+                        $textDecoration="underline"
+                    >
+                        {linkText}
+                    </Link>,
+                )
+                lastIndex = index + match.length
+                return ''
+            })
+            if (lastIndex < txt.length) {
+                nodes.push(txt.slice(lastIndex))
+            }
+
+            return nodes
+        }
         return (
             <Section
                 className={classNames}
@@ -120,7 +149,9 @@ const Card = forwardRef<HTMLElement, CardProps>(
                     }}
                     {...customizedStyle.main}
                 >
-                    <Text {...contentStyle}>{data.description}</Text>
+                    <Text {...contentStyle}>
+                        {descriptionContent(data.description)}
+                    </Text>
                     {children}
                 </Section>
                 <Footer

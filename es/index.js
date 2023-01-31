@@ -3319,6 +3319,26 @@ const Card = forwardRef(({ data, children, actions, style = (_) => ({}), ...prop
     const customizedStyle = useMemo(() => {
         return style(data);
     }, [style]);
+    const descriptionContent = (txt) => {
+        if (!txt)
+            return jsx(Fragment$1, {});
+        const regex = /\[(.*?)\]\((.*?)\)/g;
+        // const match = regex.exec(txt)
+        const nodes = [];
+        let lastIndex = 0;
+        txt.replace(regex, (match, linkText, url, index) => {
+            if (lastIndex < index) {
+                nodes.push(txt.slice(lastIndex, index));
+            }
+            nodes.push(jsx(Link, { target: "_blank", href: url, "$textColor": 'primary-500', "$textDecoration": "underline", children: linkText }));
+            lastIndex = index + match.length;
+            return '';
+        });
+        if (lastIndex < txt.length) {
+            nodes.push(txt.slice(lastIndex));
+        }
+        return nodes;
+    };
     return (jsxs(Section, { className: classNames, "$direction": "col", "$gap": "4", ...restProps, ...customizedStyle.border, ref: ref, children: [jsxs(Header, { "$direction": "row", "$justifyContent": "between", "$alignItems": "end", "$borderWidth": { bottom: 'border-b' }, "$borderColor": "neutral-200", "$padding": {
                     x: '4',
                     y: '2',
@@ -3329,7 +3349,7 @@ const Card = forwardRef(({ data, children, actions, style = (_) => ({}), ...prop
                     y: '2',
                 }, "sm$padding": {
                     x: '3',
-                }, ...customizedStyle.main, children: [jsx(Text, { ...contentStyle, children: data.description }), children] }), jsx(Footer, { "$justifyContent": "end", "$padding": {
+                }, ...customizedStyle.main, children: [jsx(Text, { ...contentStyle, children: descriptionContent(data.description) }), children] }), jsx(Footer, { "$justifyContent": "end", "$padding": {
                     bottom: '2',
                     x: '4',
                 }, "sm$padding": {
