@@ -3330,7 +3330,7 @@ const Card = forwardRef(({ data, children, actions, style = (_) => ({}), ...prop
             if (lastIndex < index) {
                 nodes.push(txt.slice(lastIndex, index));
             }
-            nodes.push(jsx(Link, { target: "_blank", href: url, "$textColor": 'primary-500', "$textDecoration": "underline", children: linkText }));
+            nodes.push(jsx(Link, { target: "_blank", href: url, "$textDecoration": "underline", children: linkText }));
             lastIndex = index + match.length;
             return '';
         });
@@ -3361,7 +3361,7 @@ const CardButton = forwardRef(({ icon, label, description, style, ...restProps }
     const theme = useTheme();
     const labelStyle = theme.typography['caption-500'];
     const descStyle = theme.typography['caption-300'];
-    return (jsx(Button$1, { ...style, ...restProps, "$padding": "2", ref: ref, children: jsxs(Box, { "$direction": "row", "$gap": "6", "$alignItems": "center", children: [jsx(Box, { "$bgColor": "info-400", "$borderRadius": "full", "$width": "10", "$height": "10", "$padding": "1.5", children: jsx(Icon, { type: icon, "$fill": "neutral-600", "$height": "8", "$width": "8", "aria-label": `${description}${label}` }) }), jsxs(Box, { "$direction": "col", children: [jsx(Text, { ...descStyle, children: description }), jsx(Text, { ...labelStyle, children: label })] })] }) }));
+    return (jsx(Button$1, { ...style, ...restProps, "$padding": "2", ref: ref, children: jsxs(Box, { "$direction": "row", "$gap": "6", "$alignItems": "center", children: [jsx(Box, { "$bgColor": "info-400", "$borderRadius": "full", "$width": "10", "$height": "10", "$padding": "1.5", children: jsx(Icon, { type: icon, "$fill": "neutral-600", "$height": "8", "$width": "8", "aria-label": `${description ?? ''}${label ?? ''}` }) }), jsxs(Box, { "$direction": "col", children: [jsx(Text, { ...descStyle, children: description }), jsx(Text, { ...labelStyle, children: label })] })] }) }));
 });
 
 const beStyleAttrTree = (props) => {

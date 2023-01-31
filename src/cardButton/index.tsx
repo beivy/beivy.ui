@@ -35,7 +35,7 @@ export const CardButton = forwardRef<HTMLButtonElement, CardButtonProps>(
                             $fill="neutral-600"
                             $height="8"
                             $width="8"
-                            aria-label={`${description}${label}`}
+                            aria-label={`${description ?? ''}${label ?? ''}`}
                         />
                     </Box>
                     <Box $direction="col">
