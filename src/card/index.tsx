@@ -1,7 +1,9 @@
 import { Box, Footer, Header, Section } from '@/core'
 import { useTheme } from '@/hooks'
 import { twClass } from '@/utils'
-import { forwardRef, useMemo } from 'react'
+import { micromark } from 'micromark'
+import React, { forwardRef, useMemo } from 'react'
+import ReactMarkdown from 'react-markdown'
 import { H2, Link, Text } from '../be.html'
 import {
     BorderProps,
@@ -29,6 +31,7 @@ export interface CardProps extends DevControlStyleProps {
     children?: React.ReactNode | React.ReactNode[]
     actions?: React.ReactNode
     style?: CardStyleFunc
+    markdown?: boolean
 }
 
 const Card = forwardRef<HTMLElement, CardProps>(
@@ -38,6 +41,7 @@ const Card = forwardRef<HTMLElement, CardProps>(
             children,
             actions,
             style = (_: CardData) => ({} as ReturnType<CardStyleFunc>),
+            markdown = false,
             ...props
         }: CardProps,
         ref,
@@ -101,6 +105,11 @@ const Card = forwardRef<HTMLElement, CardProps>(
 
             return nodes
         }
+
+        const mdRender = (txt?: string) => {
+            if (!txt) return ''
+            return micromark(txt)
+        }
         return (
             <Section
                 className={classNames}
@@ -139,7 +148,6 @@ const Card = forwardRef<HTMLElement, CardProps>(
 
                 <Section
                     $direction="col"
-                    $gap="8"
                     $padding={{
                         x: '4',
                         y: '2',
@@ -149,9 +157,15 @@ const Card = forwardRef<HTMLElement, CardProps>(
                     }}
                     {...customizedStyle.main}
                 >
-                    <Text {...contentStyle}>
-                        {descriptionContent(data.description)}
-                    </Text>
+                    {markdown && data.description ? (
+                        <ReactMarkdown className="markdown">
+                            {data.description!}
+                        </ReactMarkdown>
+                    ) : (
+                        <Text {...contentStyle}>
+                            {descriptionContent(data.description)}
+                        </Text>
+                    )}
                     {children}
                 </Section>
                 <Footer

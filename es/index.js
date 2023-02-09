@@ -3,6 +3,8 @@ import React, { forwardRef, useMemo, createContext, useState, useEffect, useCont
 import * as tc from 'tailwindcss-classnames';
 import * as R from 'ramda';
 import { mergeAll } from 'ramda';
+import 'micromark';
+import ReactMarkdown from 'react-markdown';
 import { parse } from 'papaparse';
 import { useDropzone } from 'react-dropzone';
 import { Menu as Menu$1, Transition, Listbox } from '@headlessui/react';
@@ -3296,7 +3298,7 @@ const Button = forwardRef(({ children, type = 'primary', size = 'medium', outlin
     return (jsx(Button$1, { ...buttonStyle, ...restProps, type: submit ? 'submit' : 'button', "focus$outlineWidth": "none", "focus$ringWidth": "2", "focus$ringOffsetWidth": "2", "focus$ringColor": "primary", "$width": "fit", ref: ref, children: jsxs(Box, { "$flex": "initial", inline: true, children: [leftIconContent, children, rightIconContent] }) }));
 });
 
-const Card = forwardRef(({ data, children, actions, style = (_) => ({}), ...props }, ref) => {
+const Card = forwardRef(({ data, children, actions, style = (_) => ({}), markdown = false, ...props }, ref) => {
     const theme = useTheme();
     const defaultControlStyleProps = {
         $borderWidth: 'border',
@@ -3344,12 +3346,12 @@ const Card = forwardRef(({ data, children, actions, style = (_) => ({}), ...prop
                     y: '2',
                 }, "sm$padding": {
                     x: '3',
-                }, ...customizedStyle.header, children: [jsxs(Box, { "$direction": "col", "$gap": "x-2", "md$direction": "row", children: [jsxs(H2, { ...titleStyle, children: [data.title, jsx("span", { className: "sr-only", children: data.extra })] }), jsx(Text, { ...subtitleStyle, role: "doc-subtitle", children: data.subtitle })] }), jsx(Box, { children: extraNode })] }), jsxs(Section, { "$direction": "col", "$gap": "8", "$padding": {
+                }, ...customizedStyle.header, children: [jsxs(Box, { "$direction": "col", "$gap": "x-2", "md$direction": "row", children: [jsxs(H2, { ...titleStyle, children: [data.title, jsx("span", { className: "sr-only", children: data.extra })] }), jsx(Text, { ...subtitleStyle, role: "doc-subtitle", children: data.subtitle })] }), jsx(Box, { children: extraNode })] }), jsxs(Section, { "$direction": "col", "$padding": {
                     x: '4',
                     y: '2',
                 }, "sm$padding": {
                     x: '3',
-                }, ...customizedStyle.main, children: [jsx(Text, { ...contentStyle, children: descriptionContent(data.description) }), children] }), jsx(Footer, { "$justifyContent": "end", "$padding": {
+                }, ...customizedStyle.main, children: [markdown && data.description ? (jsx(ReactMarkdown, { className: "markdown", children: data.description })) : (jsx(Text, { ...contentStyle, children: descriptionContent(data.description) })), children] }), jsx(Footer, { "$justifyContent": "end", "$padding": {
                     bottom: '2',
                     x: '4',
                 }, "sm$padding": {

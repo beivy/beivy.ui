@@ -11,8 +11,13 @@ export const ACard = () => {
     const data = {
         title: 'バレンタイン2023',
         subtitle: 'バクハツ日2023/02/14',
-        description:
-            'そういう元気なら結構なものだ、私は君の平生の主張を聞かされました。お前のいうようなもの[Google](https://www.google.com)の宅へ来て、曲り角で分れるのが先生に済まないような話をＫに対する私の感情が土台になっていた。先生は嘘を吐かない方でしょう奥さんは何のためだと[主張するのですから](https://www.google.com/search?q=%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%86%E3%82%B9%E3%83%88%E6%A4%9C%E7%B4%A2&oq=%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%86%E3%82%B9%E3%83%88%E6%A4%9C%E7%B4%A2&aqs=chrome..69i57j0i546l5.4379j0j15&sourceid=chrome&ie=UTF-8)、すべてが私に対するお嬢さんのすべてを[忘れたように思われた](https://www.google.com/search?q=%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%86%E3%82%B9%E3%83%88%E6%A4%9C%E7%B4%A2&oq=%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%86%E3%82%B9%E3%83%88%E6%A4%9C%E7%B4%A2&aqs=chrome..69i57j0i546l5.4379j0j15&sourceid=chrome&ie=UTF-8)。',
+        description: `## テストタイトル
+そういう元気なら結構なものだ、**私は君**の_平生_の主張を聞かされました。
+
+お前のいうようなもの[Google](https://www.google.com)の宅へ来て、曲り角で分れるのが先生に済まないような話をＫに対する私の感情が土台になっていた。
+
+先生は嘘を吐かない方でしょう奥さんは何のためだと[主張するのですから](https://www.google.com/search?q=%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%86%E3%82%B9%E3%83%88%E6%A4%9C%E7%B4%A2&oq=%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%86%E3%82%B9%E3%83%88%E6%A4%9C%E7%B4%A2&aqs=chrome..69i57j0i546l5.4379j0j15&sourceid=chrome&ie=UTF-8)、
+すべてが私に対するお嬢さんのすべてを[忘れたように思われた](https://www.google.com/search?q=%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%86%E3%82%B9%E3%83%88%E6%A4%9C%E7%B4%A2&oq=%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%86%E3%82%B9%E3%83%88%E6%A4%9C%E7%B4%A2&aqs=chrome..69i57j0i546l5.4379j0j15&sourceid=chrome&ie=UTF-8)。`,
         extra: '開催中',
     }
     const actions = (
@@ -22,7 +27,7 @@ export const ACard = () => {
             </Button>
         </>
     )
-    return <Card data={data} actions={actions}></Card>
+    return <Card data={data} actions={actions} markdown></Card>
 }
 
 export const ACardWithExtraAvatar = () => {
