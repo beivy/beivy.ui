@@ -3928,6 +3928,41 @@ const Navigation = forwardRef(({ items, activeItemIndex }, ref) => {
     return (jsx(List, { selectedItemIndex: activeItemIndex, children: jsx(Box, { "$direction": "row", children: itemContents }) }));
 });
 
+const Notification = forwardRef(({ show: propsShow, message, autoHidden, onClose }, ref) => {
+    const theme = useTheme();
+    const [show, setShow] = useState(propsShow);
+    const [hiddenHandler, setHiddenHandler] = useState(undefined);
+    useEffect(() => {
+        setShow(propsShow);
+    }, [propsShow]);
+    useEffect(() => {
+        if (!show) {
+            onClose && onClose();
+        }
+    }, [show]);
+    useEffect(() => {
+        if (autoHidden && show) {
+            if (hiddenHandler)
+                return;
+            const time = typeof autoHidden === 'number' ? autoHidden * 1000 : 5000;
+            const handler = setTimeout(() => {
+                setShow(false);
+                setHiddenHandler(undefined);
+            }, time);
+            setHiddenHandler(handler);
+        }
+        return () => {
+            if (hiddenHandler) {
+                clearTimeout(hiddenHandler);
+            }
+        };
+    }, [autoHidden, show]);
+    return (jsx(Box, { "arial-live": "assertive", "$position": "fixed", "$alignContent": "end", "$inset": "0", "$padding": {
+            x: '4',
+            y: '6',
+        }, "sm$alignContent": "start", "sm$padding": "6", className: "pointer-events-none", children: jsx(Box, { "$width": "full", "$direction": "col", "$alignItems": "center", "$space": "y-4", "sm$alignItems": "start", "$justifyContent": "end", children: jsx(Transition, { show: show, as: "div", enter: "transition ease-out duration-300 transition", enterFrom: "translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2", enterTo: "translate-y-0 opacity=100 sm: translate-x-0", leave: "transition easi-in duration-100", leaveFrom: "opacity-100", leaveTo: "opacity-0", children: jsxs(Box, { "$width": "full", "sm$width": "max", "$overflow": "hidden", "$borderRadius": "lg", "$bgColor": "white", "$shadow": "lg", "$ringWidth": "1", "$ringColor": "neutral-400", "$padding": "4", "$alignItems": "center", className: "pointer-events-auto", children: [jsx(Box, { "$justifyContent": "between", children: jsx(Text, { ...theme.typography['content-400'], children: message ?? '' }) }), jsx(Box, { "$margin": { left: '4' }, "$flexShrink": "flex-shrink-0", "$width": "min", children: jsxs(Button$1, { "$display": "inline-flex", "$borderRadius": "md", "$bgColor": "white", "$borderColor": "primary-300", "hover$textColor": "neutral-500", "hover$bgColor": "primary-300", "focus$ringWidth": "2", "focus$ringColor": "primary", "focus$ringOffsetWidth": "2", onClick: () => setShow(false), "$width": "min", "$padding": "0", "$lineHeight": "4", children: [jsx("span", { className: "sr-only", children: "\u9589\u3058\u308B" }), jsx(Icon, { "$fill": "primary-400", "hover$fill": "primary", type: "Close", "$width": "5", "$height": "5" })] }) })] }) }) }) }));
+});
+
 const Spinner = () => {
     return (jsx("div", { className: "flex justify-center", children: jsx("div", { className: "animate-spin h-4 w-4 border-2 border-primary-500 rounded-full border-t-transparent" }) }));
 };
@@ -4102,4 +4137,4 @@ const Textarea = forwardRef(({ id, name, defaultValue, label, icon, rows = 5, ru
     return (jsxs(Box, { className: classNames, ...arrangement, children: [label && textAreaLabel, jsxs(Stack, { "$width": "full", children: [jsx(TextArea, { id: id, name: name, cols: 32, rows: rows, "$borderRadius": "md", "$borderColor": "neutral-300", ...inputStyle, "$width": "full", defaultValue: savedValue, ...restProps, onChange: onChangeHandlerFactory(onChange), ref: textareaRef }), icon && (jsx(Stack.Item, { "$bottom": "2", "$right": "2", children: jsx(Button$1, { onClick: onClickHandler, disabled: isDisabled, children: jsx(Icon, { type: icon, "$height": "8", ...iconFill(), "aria-label": "\u9001\u4FE1" }) }) }))] })] }));
 });
 
-export { Article, Aside, Avatar, Badge, Box, Button, CSVFileUploader, Card, CardButton, Checkbox, CheckboxGroup, Column, Details, Div, Figcaption, Figure, FileUploadStatus, FileUploader, Footer, Grid, H1, H2, H3, H4, H5, Header, Heading, Icon, Image, Input, LI, LinearProgress, Link, List, Main, Mark, Menu, MenuItem, Nav, Navigation, NumInfo, Panel, SVGName, Search, Section, Select, SelectMode, Span, Stack, StreamProcessor, Summary, Text, Textarea, Theme, ThemeContext, ThemeProvider, Time, UL, attrsClassNameVisitor, isFunction, svgName, twAttrsTree, twBox, twClass, twColumn, twGrid, twGridItem, twPrefix, twStack, twStackItem, twSvg, twTransfer, useStream, useTheme, walkThroughAttrsTree };
+export { Article, Aside, Avatar, Badge, Box, Button, CSVFileUploader, Card, CardButton, Checkbox, CheckboxGroup, Column, Details, Div, Figcaption, Figure, FileUploadStatus, FileUploader, Footer, Grid, H1, H2, H3, H4, H5, Header, Heading, Icon, Image, Input, LI, LinearProgress, Link, List, Main, Mark, Menu, MenuItem, Nav, Navigation, Notification, NumInfo, Panel, SVGName, Search, Section, Select, SelectMode, Span, Stack, StreamProcessor, Summary, Text, Textarea, Theme, ThemeContext, ThemeProvider, Time, UL, attrsClassNameVisitor, isFunction, svgName, twAttrsTree, twBox, twClass, twColumn, twGrid, twGridItem, twPrefix, twStack, twStackItem, twSvg, twTransfer, useStream, useTheme, walkThroughAttrsTree };

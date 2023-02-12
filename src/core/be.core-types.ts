@@ -284,6 +284,9 @@ export interface BoxPropsWithoutDisplay
 
 export interface BoxProps
     extends BoxPropsWithoutDisplay,
+        Partial<InsetProps>,
+        Partial<Screen<InsetProps>>,
+        Partial<PseudoState<InsetProps>>,
         Partial<FlexBoxProps>,
         Partial<Screen<FlexBoxProps>>,
         Partial<PseudoState<FlexBoxProps>> {}
